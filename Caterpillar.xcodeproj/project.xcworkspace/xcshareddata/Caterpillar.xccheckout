@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>7B50B8A8-DD20-4106-8E78-E3D4A8C1FD96</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Caterpillar</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>1A310C10-AFE5-44DB-9D01-703535EF3AFE</key>
+		<string>ssh://github.com/KevinDoughty/Caterpillar.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Caterpillar.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>1A310C10-AFE5-44DB-9D01-703535EF3AFE</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/KevinDoughty/Caterpillar.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>1A310C10-AFE5-44DB-9D01-703535EF3AFE</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>1A310C10-AFE5-44DB-9D01-703535EF3AFE</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Caterpillar</string>
+		</dict>
+	</array>
+</dict>
+</plist>
