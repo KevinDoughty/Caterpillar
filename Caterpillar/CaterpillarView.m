@@ -257,11 +257,11 @@
 }
 
 -(double(^)(double))timingBlock {
-    return [RelativeBezier perfectBezier];
+    return [RelativeAnimation perfectBezier];
 }
 
 -(double(^)(double))layoutBlock {
-    double (^roundBlock)(double) = [RelativeBezier perfectBezier];
+    double (^roundBlock)(double) = [RelativeAnimation perfectBezier];
     double (^pullBlock)(double) = [self elasticBlock];
     return ^(double progress) {
         return roundBlock(pullBlock(progress));

@@ -28,7 +28,28 @@
 
 #define  Relative_Default_Step_Count 50
 
+@interface RelativeBezier()
+@property (assign,readonly) double ax;
+@property (assign,readonly) double bx;
+@property (assign,readonly) double cx;
+@property (assign,readonly) double ay;
+@property (assign,readonly) double by;
+@property (assign,readonly) double cy;
+-(instancetype)initWithRelativeControlPoints:(double)p1x :(double)p1y :(double)p2x :(double)p2y;
+-(double)solveX:(double)x epsilon:(double)epsilon;
+@end
+
 @implementation RelativeAnimation
+
++(double(^)(double))perfectBezier {
+    return [self bezierWithControlPoints:.5 :0 :.5 :1];
+}
++(double(^)(double))bezierWithControlPoints:(double)p1x :(double)p1y :(double)p2x :(double)p2y {
+    RelativeBezier *bezier = [[RelativeBezier alloc] initWithRelativeControlPoints:p1x :p1y :p2x :p2y];
+    return ^ (double progress) {
+        return [bezier solveX:progress epsilon:1];
+    };
+}
 
 -(id)copyWithZone:(NSZone *)zone {
     RelativeAnimation *theCopy = [super copyWithZone:zone];
@@ -225,25 +246,8 @@ const double relativeBlendFloat(double old, double nu, double progress, BOOL isR
 
 // This file has been heavily modified from the original WebKit source, UnitBezier.h
 
-@interface RelativeBezier()
-@property (assign,readonly) double ax;
-@property (assign,readonly) double bx;
-@property (assign,readonly) double cx;
-@property (assign,readonly) double ay;
-@property (assign,readonly) double by;
-@property (assign,readonly) double cy;
-@end
-
 @implementation RelativeBezier
-+(double(^)(double))perfectBezier {
-    return [self bezierWithControlPoints:.5 :0 :.5 :1];
-}
-+(double(^)(double))bezierWithControlPoints:(double)p1x :(double)p1y :(double)p2x :(double)p2y {
-    RelativeBezier *bezier = [[[self class] alloc] initWithRelativeControlPoints:p1x :p1y :p2x :p2y];
-    return ^ (double progress) {
-        return [bezier solveX:progress epsilon:1];
-    };
-}
+
 -(instancetype)initWithRelativeControlPoints:(double)p1x :(double)p1y :(double)p2x :(double)p2y {
     if ((self = [super init])) {
         // Calculate the polynomial coefficients, implicit first and last control points are (0,0) and (1,1).

@@ -29,6 +29,8 @@
 @interface RelativeAnimation : CAKeyframeAnimation
 
 +(instancetype)animationWithKeyPath:(NSString*)thePath;
++(double(^)(double))perfectBezier;
++(double(^)(double))bezierWithControlPoints:(double)p1x :(double)p1y :(double)p2x :(double)p2y;
 
 @property (nonatomic,strong) id fromValue;
 @property (nonatomic,strong) id toValue;
@@ -69,8 +71,7 @@
 // This file has been heavily modified from the original WebKit source, UnitBezier.h
 
 @interface RelativeBezier : NSObject
-+(double(^)(double))perfectBezier;
-+(double(^)(double))bezierWithControlPoints:(double)p1x :(double)p1y :(double)p2x :(double)p2y;
+
 @end
 
 
