@@ -7,6 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A90718E191DECEC0081CC39 /* Artificial_24.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A90717D191DECEC0081CC39 /* Artificial_24.png */; };
+		0A90718F191DECEC0081CC39 /* Artificial_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A90717E191DECEC0081CC39 /* Artificial_30.png */; };
+		0A907190191DECEC0081CC39 /* Artificial_37.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A90717F191DECEC0081CC39 /* Artificial_37.png */; };
+		0A907191191DECEC0081CC39 /* Artificial_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A907180191DECEC0081CC39 /* Artificial_256.png */; };
+		0A907192191DECEC0081CC39 /* flipper_list_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A907181191DECEC0081CC39 /* flipper_list_blue.png */; };
+		0A907193191DECEC0081CC39 /* Gas_24.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A907182191DECEC0081CC39 /* Gas_24.png */; };
+		0A907194191DECEC0081CC39 /* Gas_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A907183191DECEC0081CC39 /* Gas_30.png */; };
+		0A907195191DECEC0081CC39 /* Gas_37.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A907184191DECEC0081CC39 /* Gas_37.png */; };
+		0A907196191DECEC0081CC39 /* Gas_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A907185191DECEC0081CC39 /* Gas_256.png */; };
+		0A907197191DECEC0081CC39 /* Liquid_24.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A907186191DECEC0081CC39 /* Liquid_24.png */; };
+		0A907198191DECEC0081CC39 /* Liquid_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A907187191DECEC0081CC39 /* Liquid_30.png */; };
+		0A907199191DECEC0081CC39 /* Liquid_37.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A907188191DECEC0081CC39 /* Liquid_37.png */; };
+		0A90719A191DECEC0081CC39 /* Liquid_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A907189191DECEC0081CC39 /* Liquid_256.png */; };
+		0A90719B191DECEC0081CC39 /* Solid_24.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A90718A191DECEC0081CC39 /* Solid_24.png */; };
+		0A90719C191DECEC0081CC39 /* Solid_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A90718B191DECEC0081CC39 /* Solid_30.png */; };
+		0A90719D191DECEC0081CC39 /* Solid_37.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A90718C191DECEC0081CC39 /* Solid_37.png */; };
+		0A90719E191DECEC0081CC39 /* Solid_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A90718D191DECEC0081CC39 /* Solid_256.png */; };
+		0A9071A1191DED040081CC39 /* AtomicElementTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A9071A0191DED040081CC39 /* AtomicElementTileView.m */; };
+		0A9071A4191DED130081CC39 /* AtomicElementTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A9071A3191DED130081CC39 /* AtomicElementTableViewCell.m */; };
+		0A9071AB191DED280081CC39 /* AtomicElementFlippedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A9071A6191DED280081CC39 /* AtomicElementFlippedView.m */; };
+		0A9071AC191DED280081CC39 /* AtomicElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A9071A8191DED280081CC39 /* AtomicElementView.m */; };
+		0A9071AD191DED280081CC39 /* AtomicElementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A9071AA191DED280081CC39 /* AtomicElementViewController.m */; };
+		0A9071B2191DED3B0081CC39 /* AtomicElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A9071AF191DED3B0081CC39 /* AtomicElement.m */; };
+		0A9071B3191DED3B0081CC39 /* PeriodicElements.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A9071B1191DED3B0081CC39 /* PeriodicElements.m */; };
 		0AD45779191BC2FB0063D1BC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD45778191BC2FB0063D1BC /* Foundation.framework */; };
 		0AD4577B191BC2FB0063D1BC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD4577A191BC2FB0063D1BC /* CoreGraphics.framework */; };
 		0AD4577D191BC2FB0063D1BC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD4577C191BC2FB0063D1BC /* UIKit.framework */; };
@@ -20,30 +44,6 @@
 		0AD457A8191BC2FC0063D1BC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457A6191BC2FC0063D1BC /* InfoPlist.strings */; };
 		0AD457AA191BC2FC0063D1BC /* CaterpillarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457A9191BC2FC0063D1BC /* CaterpillarTests.m */; };
 		0AD457B5191BC38E0063D1BC /* RelativeAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457B4191BC38E0063D1BC /* RelativeAnimation.m */; };
-		0AD457C9191BC9CD0063D1BC /* Artificial_37.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457B9191BC9CD0063D1BC /* Artificial_37.png */; };
-		0AD457CA191BC9CD0063D1BC /* Gas_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457BA191BC9CD0063D1BC /* Gas_30.png */; };
-		0AD457CB191BC9CD0063D1BC /* Solid_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457BB191BC9CD0063D1BC /* Solid_30.png */; };
-		0AD457CC191BC9CD0063D1BC /* Artificial_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457BC191BC9CD0063D1BC /* Artificial_30.png */; };
-		0AD457CD191BC9CD0063D1BC /* Liquid_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457BD191BC9CD0063D1BC /* Liquid_30.png */; };
-		0AD457CE191BC9CD0063D1BC /* Gas_37.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457BE191BC9CD0063D1BC /* Gas_37.png */; };
-		0AD457CF191BC9CD0063D1BC /* Liquid_37.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457BF191BC9CD0063D1BC /* Liquid_37.png */; };
-		0AD457D0191BC9CD0063D1BC /* Solid_37.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457C0191BC9CD0063D1BC /* Solid_37.png */; };
-		0AD457D1191BC9CD0063D1BC /* Artificial_24.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457C1191BC9CD0063D1BC /* Artificial_24.png */; };
-		0AD457D2191BC9CD0063D1BC /* Artificial_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457C2191BC9CD0063D1BC /* Artificial_256.png */; };
-		0AD457D3191BC9CD0063D1BC /* Gas_24.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457C3191BC9CD0063D1BC /* Gas_24.png */; };
-		0AD457D4191BC9CD0063D1BC /* Gas_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457C4191BC9CD0063D1BC /* Gas_256.png */; };
-		0AD457D5191BC9CD0063D1BC /* Liquid_24.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457C5191BC9CD0063D1BC /* Liquid_24.png */; };
-		0AD457D6191BC9CD0063D1BC /* Liquid_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457C6191BC9CD0063D1BC /* Liquid_256.png */; };
-		0AD457D7191BC9CD0063D1BC /* Solid_24.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457C7191BC9CD0063D1BC /* Solid_24.png */; };
-		0AD457D8191BC9CD0063D1BC /* Solid_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457C8191BC9CD0063D1BC /* Solid_256.png */; };
-		0AD457DE191BC9E10063D1BC /* AtomicElementTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457DB191BC9E10063D1BC /* AtomicElementTileView.m */; };
-		0AD457DF191BC9E10063D1BC /* AtomicElementTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457DD191BC9E10063D1BC /* AtomicElementTableViewCell.m */; };
-		0AD457E5191BC9F60063D1BC /* AtomicElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457E2191BC9F60063D1BC /* AtomicElement.m */; };
-		0AD457E6191BC9F60063D1BC /* PeriodicElements.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457E4191BC9F60063D1BC /* PeriodicElements.m */; };
-		0AD457EF191BCA060063D1BC /* AtomicElementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457E9191BCA060063D1BC /* AtomicElementViewController.m */; };
-		0AD457F0191BCA060063D1BC /* AtomicElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457EB191BCA060063D1BC /* AtomicElementView.m */; };
-		0AD457F1191BCA060063D1BC /* AtomicElementFlippedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457ED191BCA060063D1BC /* AtomicElementFlippedView.m */; };
-		0AD457F2191BCA060063D1BC /* flipper_list_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457EE191BCA060063D1BC /* flipper_list_blue.png */; };
 		0AD457F5191BD34A0063D1BC /* CaterpillarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457F4191BD34A0063D1BC /* CaterpillarView.m */; };
 		0AD457F8191BD43A0063D1BC /* CaterpillarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457F7191BD43A0063D1BC /* CaterpillarCell.m */; };
 		0AD457FB191BDAAE0063D1BC /* CaterpillarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457FA191BDAAE0063D1BC /* CaterpillarViewController.m */; };
@@ -61,6 +61,37 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A90717D191DECEC0081CC39 /* Artificial_24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Artificial_24.png; path = Caterpillar/images/Artificial_24.png; sourceTree = "<group>"; };
+		0A90717E191DECEC0081CC39 /* Artificial_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Artificial_30.png; path = Caterpillar/images/Artificial_30.png; sourceTree = "<group>"; };
+		0A90717F191DECEC0081CC39 /* Artificial_37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Artificial_37.png; path = Caterpillar/images/Artificial_37.png; sourceTree = "<group>"; };
+		0A907180191DECEC0081CC39 /* Artificial_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Artificial_256.png; path = Caterpillar/images/Artificial_256.png; sourceTree = "<group>"; };
+		0A907181191DECEC0081CC39 /* flipper_list_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = flipper_list_blue.png; path = Caterpillar/images/flipper_list_blue.png; sourceTree = "<group>"; };
+		0A907182191DECEC0081CC39 /* Gas_24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Gas_24.png; path = Caterpillar/images/Gas_24.png; sourceTree = "<group>"; };
+		0A907183191DECEC0081CC39 /* Gas_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Gas_30.png; path = Caterpillar/images/Gas_30.png; sourceTree = "<group>"; };
+		0A907184191DECEC0081CC39 /* Gas_37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Gas_37.png; path = Caterpillar/images/Gas_37.png; sourceTree = "<group>"; };
+		0A907185191DECEC0081CC39 /* Gas_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Gas_256.png; path = Caterpillar/images/Gas_256.png; sourceTree = "<group>"; };
+		0A907186191DECEC0081CC39 /* Liquid_24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Liquid_24.png; path = Caterpillar/images/Liquid_24.png; sourceTree = "<group>"; };
+		0A907187191DECEC0081CC39 /* Liquid_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Liquid_30.png; path = Caterpillar/images/Liquid_30.png; sourceTree = "<group>"; };
+		0A907188191DECEC0081CC39 /* Liquid_37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Liquid_37.png; path = Caterpillar/images/Liquid_37.png; sourceTree = "<group>"; };
+		0A907189191DECEC0081CC39 /* Liquid_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Liquid_256.png; path = Caterpillar/images/Liquid_256.png; sourceTree = "<group>"; };
+		0A90718A191DECEC0081CC39 /* Solid_24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Solid_24.png; path = Caterpillar/images/Solid_24.png; sourceTree = "<group>"; };
+		0A90718B191DECEC0081CC39 /* Solid_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Solid_30.png; path = Caterpillar/images/Solid_30.png; sourceTree = "<group>"; };
+		0A90718C191DECEC0081CC39 /* Solid_37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Solid_37.png; path = Caterpillar/images/Solid_37.png; sourceTree = "<group>"; };
+		0A90718D191DECEC0081CC39 /* Solid_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Solid_256.png; path = Caterpillar/images/Solid_256.png; sourceTree = "<group>"; };
+		0A90719F191DED040081CC39 /* AtomicElementTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AtomicElementTileView.h; path = "Caterpillar/The Elements/AtomicElementTileView.h"; sourceTree = "<group>"; };
+		0A9071A0191DED040081CC39 /* AtomicElementTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AtomicElementTileView.m; path = "Caterpillar/The Elements/AtomicElementTileView.m"; sourceTree = "<group>"; };
+		0A9071A2191DED130081CC39 /* AtomicElementTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AtomicElementTableViewCell.h; path = "Caterpillar/The Elements/AtomicElementTableViewCell.h"; sourceTree = "<group>"; };
+		0A9071A3191DED130081CC39 /* AtomicElementTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AtomicElementTableViewCell.m; path = "Caterpillar/The Elements/AtomicElementTableViewCell.m"; sourceTree = "<group>"; };
+		0A9071A5191DED280081CC39 /* AtomicElementFlippedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AtomicElementFlippedView.h; path = "Caterpillar/The Elements/AtomicElementFlippedView.h"; sourceTree = "<group>"; };
+		0A9071A6191DED280081CC39 /* AtomicElementFlippedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AtomicElementFlippedView.m; path = "Caterpillar/The Elements/AtomicElementFlippedView.m"; sourceTree = "<group>"; };
+		0A9071A7191DED280081CC39 /* AtomicElementView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AtomicElementView.h; path = "Caterpillar/The Elements/AtomicElementView.h"; sourceTree = "<group>"; };
+		0A9071A8191DED280081CC39 /* AtomicElementView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AtomicElementView.m; path = "Caterpillar/The Elements/AtomicElementView.m"; sourceTree = "<group>"; };
+		0A9071A9191DED280081CC39 /* AtomicElementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AtomicElementViewController.h; path = "Caterpillar/The Elements/AtomicElementViewController.h"; sourceTree = "<group>"; };
+		0A9071AA191DED280081CC39 /* AtomicElementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AtomicElementViewController.m; path = "Caterpillar/The Elements/AtomicElementViewController.m"; sourceTree = "<group>"; };
+		0A9071AE191DED3B0081CC39 /* AtomicElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AtomicElement.h; path = "Caterpillar/The Elements/AtomicElement.h"; sourceTree = "<group>"; };
+		0A9071AF191DED3B0081CC39 /* AtomicElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AtomicElement.m; path = "Caterpillar/The Elements/AtomicElement.m"; sourceTree = "<group>"; };
+		0A9071B0191DED3B0081CC39 /* PeriodicElements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PeriodicElements.h; path = "Caterpillar/The Elements/PeriodicElements.h"; sourceTree = "<group>"; };
+		0A9071B1191DED3B0081CC39 /* PeriodicElements.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PeriodicElements.m; path = "Caterpillar/The Elements/PeriodicElements.m"; sourceTree = "<group>"; };
 		0AD45775191BC2FB0063D1BC /* Caterpillar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Caterpillar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AD45778191BC2FB0063D1BC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0AD4577A191BC2FB0063D1BC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -79,37 +110,6 @@
 		0AD457A9191BC2FC0063D1BC /* CaterpillarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CaterpillarTests.m; sourceTree = "<group>"; };
 		0AD457B3191BC38E0063D1BC /* RelativeAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RelativeAnimation.h; sourceTree = "<group>"; };
 		0AD457B4191BC38E0063D1BC /* RelativeAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RelativeAnimation.m; sourceTree = "<group>"; };
-		0AD457B9191BC9CD0063D1BC /* Artificial_37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Artificial_37.png; sourceTree = "<group>"; };
-		0AD457BA191BC9CD0063D1BC /* Gas_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Gas_30.png; sourceTree = "<group>"; };
-		0AD457BB191BC9CD0063D1BC /* Solid_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Solid_30.png; sourceTree = "<group>"; };
-		0AD457BC191BC9CD0063D1BC /* Artificial_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Artificial_30.png; sourceTree = "<group>"; };
-		0AD457BD191BC9CD0063D1BC /* Liquid_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Liquid_30.png; sourceTree = "<group>"; };
-		0AD457BE191BC9CD0063D1BC /* Gas_37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Gas_37.png; sourceTree = "<group>"; };
-		0AD457BF191BC9CD0063D1BC /* Liquid_37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Liquid_37.png; sourceTree = "<group>"; };
-		0AD457C0191BC9CD0063D1BC /* Solid_37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Solid_37.png; sourceTree = "<group>"; };
-		0AD457C1191BC9CD0063D1BC /* Artificial_24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Artificial_24.png; sourceTree = "<group>"; };
-		0AD457C2191BC9CD0063D1BC /* Artificial_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Artificial_256.png; sourceTree = "<group>"; };
-		0AD457C3191BC9CD0063D1BC /* Gas_24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Gas_24.png; sourceTree = "<group>"; };
-		0AD457C4191BC9CD0063D1BC /* Gas_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Gas_256.png; sourceTree = "<group>"; };
-		0AD457C5191BC9CD0063D1BC /* Liquid_24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Liquid_24.png; sourceTree = "<group>"; };
-		0AD457C6191BC9CD0063D1BC /* Liquid_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Liquid_256.png; sourceTree = "<group>"; };
-		0AD457C7191BC9CD0063D1BC /* Solid_24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Solid_24.png; sourceTree = "<group>"; };
-		0AD457C8191BC9CD0063D1BC /* Solid_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Solid_256.png; sourceTree = "<group>"; };
-		0AD457DA191BC9E10063D1BC /* AtomicElementTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtomicElementTileView.h; sourceTree = "<group>"; };
-		0AD457DB191BC9E10063D1BC /* AtomicElementTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AtomicElementTileView.m; sourceTree = "<group>"; };
-		0AD457DC191BC9E10063D1BC /* AtomicElementTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtomicElementTableViewCell.h; sourceTree = "<group>"; };
-		0AD457DD191BC9E10063D1BC /* AtomicElementTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AtomicElementTableViewCell.m; sourceTree = "<group>"; };
-		0AD457E1191BC9F60063D1BC /* AtomicElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtomicElement.h; sourceTree = "<group>"; };
-		0AD457E2191BC9F60063D1BC /* AtomicElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AtomicElement.m; sourceTree = "<group>"; };
-		0AD457E3191BC9F60063D1BC /* PeriodicElements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeriodicElements.h; sourceTree = "<group>"; };
-		0AD457E4191BC9F60063D1BC /* PeriodicElements.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeriodicElements.m; sourceTree = "<group>"; };
-		0AD457E8191BCA060063D1BC /* AtomicElementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtomicElementViewController.h; sourceTree = "<group>"; };
-		0AD457E9191BCA060063D1BC /* AtomicElementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AtomicElementViewController.m; sourceTree = "<group>"; };
-		0AD457EA191BCA060063D1BC /* AtomicElementView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtomicElementView.h; sourceTree = "<group>"; };
-		0AD457EB191BCA060063D1BC /* AtomicElementView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AtomicElementView.m; sourceTree = "<group>"; };
-		0AD457EC191BCA060063D1BC /* AtomicElementFlippedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtomicElementFlippedView.h; sourceTree = "<group>"; };
-		0AD457ED191BCA060063D1BC /* AtomicElementFlippedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AtomicElementFlippedView.m; sourceTree = "<group>"; };
-		0AD457EE191BCA060063D1BC /* flipper_list_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flipper_list_blue.png; sourceTree = "<group>"; };
 		0AD457F3191BD34A0063D1BC /* CaterpillarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaterpillarView.h; sourceTree = "<group>"; };
 		0AD457F4191BD34A0063D1BC /* CaterpillarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaterpillarView.m; sourceTree = "<group>"; };
 		0AD457F6191BD43A0063D1BC /* CaterpillarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaterpillarCell.h; sourceTree = "<group>"; };
@@ -245,22 +245,23 @@
 		0AD457B8191BC9BD0063D1BC /* images */ = {
 			isa = PBXGroup;
 			children = (
-				0AD457B9191BC9CD0063D1BC /* Artificial_37.png */,
-				0AD457BA191BC9CD0063D1BC /* Gas_30.png */,
-				0AD457BB191BC9CD0063D1BC /* Solid_30.png */,
-				0AD457BC191BC9CD0063D1BC /* Artificial_30.png */,
-				0AD457BD191BC9CD0063D1BC /* Liquid_30.png */,
-				0AD457BE191BC9CD0063D1BC /* Gas_37.png */,
-				0AD457BF191BC9CD0063D1BC /* Liquid_37.png */,
-				0AD457C0191BC9CD0063D1BC /* Solid_37.png */,
-				0AD457C1191BC9CD0063D1BC /* Artificial_24.png */,
-				0AD457C2191BC9CD0063D1BC /* Artificial_256.png */,
-				0AD457C3191BC9CD0063D1BC /* Gas_24.png */,
-				0AD457C4191BC9CD0063D1BC /* Gas_256.png */,
-				0AD457C5191BC9CD0063D1BC /* Liquid_24.png */,
-				0AD457C6191BC9CD0063D1BC /* Liquid_256.png */,
-				0AD457C7191BC9CD0063D1BC /* Solid_24.png */,
-				0AD457C8191BC9CD0063D1BC /* Solid_256.png */,
+				0A90717D191DECEC0081CC39 /* Artificial_24.png */,
+				0A90717E191DECEC0081CC39 /* Artificial_30.png */,
+				0A90717F191DECEC0081CC39 /* Artificial_37.png */,
+				0A907180191DECEC0081CC39 /* Artificial_256.png */,
+				0A907181191DECEC0081CC39 /* flipper_list_blue.png */,
+				0A907182191DECEC0081CC39 /* Gas_24.png */,
+				0A907183191DECEC0081CC39 /* Gas_30.png */,
+				0A907184191DECEC0081CC39 /* Gas_37.png */,
+				0A907185191DECEC0081CC39 /* Gas_256.png */,
+				0A907186191DECEC0081CC39 /* Liquid_24.png */,
+				0A907187191DECEC0081CC39 /* Liquid_30.png */,
+				0A907188191DECEC0081CC39 /* Liquid_37.png */,
+				0A907189191DECEC0081CC39 /* Liquid_256.png */,
+				0A90718A191DECEC0081CC39 /* Solid_24.png */,
+				0A90718B191DECEC0081CC39 /* Solid_30.png */,
+				0A90718C191DECEC0081CC39 /* Solid_37.png */,
+				0A90718D191DECEC0081CC39 /* Solid_256.png */,
 			);
 			name = images;
 			sourceTree = "<group>";
@@ -268,10 +269,10 @@
 		0AD457D9191BC9D60063D1BC /* views */ = {
 			isa = PBXGroup;
 			children = (
-				0AD457DA191BC9E10063D1BC /* AtomicElementTileView.h */,
-				0AD457DB191BC9E10063D1BC /* AtomicElementTileView.m */,
-				0AD457DC191BC9E10063D1BC /* AtomicElementTableViewCell.h */,
-				0AD457DD191BC9E10063D1BC /* AtomicElementTableViewCell.m */,
+				0A90719F191DED040081CC39 /* AtomicElementTileView.h */,
+				0A9071A0191DED040081CC39 /* AtomicElementTileView.m */,
+				0A9071A2191DED130081CC39 /* AtomicElementTableViewCell.h */,
+				0A9071A3191DED130081CC39 /* AtomicElementTableViewCell.m */,
 			);
 			name = views;
 			sourceTree = "<group>";
@@ -279,10 +280,10 @@
 		0AD457E0191BC9E90063D1BC /* model */ = {
 			isa = PBXGroup;
 			children = (
-				0AD457E1191BC9F60063D1BC /* AtomicElement.h */,
-				0AD457E2191BC9F60063D1BC /* AtomicElement.m */,
-				0AD457E3191BC9F60063D1BC /* PeriodicElements.h */,
-				0AD457E4191BC9F60063D1BC /* PeriodicElements.m */,
+				0A9071AE191DED3B0081CC39 /* AtomicElement.h */,
+				0A9071AF191DED3B0081CC39 /* AtomicElement.m */,
+				0A9071B0191DED3B0081CC39 /* PeriodicElements.h */,
+				0A9071B1191DED3B0081CC39 /* PeriodicElements.m */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -290,13 +291,12 @@
 		0AD457E7191BC9FB0063D1BC /* detail */ = {
 			isa = PBXGroup;
 			children = (
-				0AD457E8191BCA060063D1BC /* AtomicElementViewController.h */,
-				0AD457E9191BCA060063D1BC /* AtomicElementViewController.m */,
-				0AD457EA191BCA060063D1BC /* AtomicElementView.h */,
-				0AD457EB191BCA060063D1BC /* AtomicElementView.m */,
-				0AD457EC191BCA060063D1BC /* AtomicElementFlippedView.h */,
-				0AD457ED191BCA060063D1BC /* AtomicElementFlippedView.m */,
-				0AD457EE191BCA060063D1BC /* flipper_list_blue.png */,
+				0A9071A5191DED280081CC39 /* AtomicElementFlippedView.h */,
+				0A9071A6191DED280081CC39 /* AtomicElementFlippedView.m */,
+				0A9071A7191DED280081CC39 /* AtomicElementView.h */,
+				0A9071A8191DED280081CC39 /* AtomicElementView.m */,
+				0A9071A9191DED280081CC39 /* AtomicElementViewController.h */,
+				0A9071AA191DED280081CC39 /* AtomicElementViewController.m */,
 			);
 			name = detail;
 			sourceTree = "<group>";
@@ -378,26 +378,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0AD457CB191BC9CD0063D1BC /* Solid_30.png in Resources */,
-				0AD457D5191BC9CD0063D1BC /* Liquid_24.png in Resources */,
-				0AD457CE191BC9CD0063D1BC /* Gas_37.png in Resources */,
-				0AD457D6191BC9CD0063D1BC /* Liquid_256.png in Resources */,
-				0AD457D1191BC9CD0063D1BC /* Artificial_24.png in Resources */,
 				0AD45797191BC2FC0063D1BC /* Images.xcassets in Resources */,
-				0AD457D4191BC9CD0063D1BC /* Gas_256.png in Resources */,
-				0AD457CA191BC9CD0063D1BC /* Gas_30.png in Resources */,
-				0AD457D3191BC9CD0063D1BC /* Gas_24.png in Resources */,
-				0AD457D8191BC9CD0063D1BC /* Solid_256.png in Resources */,
-				0AD457CD191BC9CD0063D1BC /* Liquid_30.png in Resources */,
-				0AD457D0191BC9CD0063D1BC /* Solid_37.png in Resources */,
+				0A907196191DECEC0081CC39 /* Gas_256.png in Resources */,
+				0A90718E191DECEC0081CC39 /* Artificial_24.png in Resources */,
+				0A907197191DECEC0081CC39 /* Liquid_24.png in Resources */,
+				0A90719C191DECEC0081CC39 /* Solid_30.png in Resources */,
 				0AD457FD191BDC0C0063D1BC /* Main_iPhone.storyboard in Resources */,
+				0A90719A191DECEC0081CC39 /* Liquid_256.png in Resources */,
+				0A907199191DECEC0081CC39 /* Liquid_37.png in Resources */,
+				0A90718F191DECEC0081CC39 /* Artificial_30.png in Resources */,
+				0A907192191DECEC0081CC39 /* flipper_list_blue.png in Resources */,
+				0A907191191DECEC0081CC39 /* Artificial_256.png in Resources */,
+				0A90719E191DECEC0081CC39 /* Solid_256.png in Resources */,
+				0A907198191DECEC0081CC39 /* Liquid_30.png in Resources */,
+				0A90719B191DECEC0081CC39 /* Solid_24.png in Resources */,
+				0A907194191DECEC0081CC39 /* Gas_30.png in Resources */,
+				0A907193191DECEC0081CC39 /* Gas_24.png in Resources */,
+				0A90719D191DECEC0081CC39 /* Solid_37.png in Resources */,
+				0A907195191DECEC0081CC39 /* Gas_37.png in Resources */,
 				0AD45783191BC2FB0063D1BC /* InfoPlist.strings in Resources */,
-				0AD457CF191BC9CD0063D1BC /* Liquid_37.png in Resources */,
-				0AD457D7191BC9CD0063D1BC /* Solid_24.png in Resources */,
-				0AD457F2191BCA060063D1BC /* flipper_list_blue.png in Resources */,
-				0AD457D2191BC9CD0063D1BC /* Artificial_256.png in Resources */,
-				0AD457CC191BC9CD0063D1BC /* Artificial_30.png in Resources */,
-				0AD457C9191BC9CD0063D1BC /* Artificial_37.png in Resources */,
+				0A907190191DECEC0081CC39 /* Artificial_37.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,19 +416,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0AD457DF191BC9E10063D1BC /* AtomicElementTableViewCell.m in Sources */,
-				0AD457E5191BC9F60063D1BC /* AtomicElement.m in Sources */,
-				0AD457EF191BCA060063D1BC /* AtomicElementViewController.m in Sources */,
+				0A9071AC191DED280081CC39 /* AtomicElementView.m in Sources */,
+				0A9071B2191DED3B0081CC39 /* AtomicElement.m in Sources */,
 				0AD457F5191BD34A0063D1BC /* CaterpillarView.m in Sources */,
-				0AD457F1191BCA060063D1BC /* AtomicElementFlippedView.m in Sources */,
 				0AD457F8191BD43A0063D1BC /* CaterpillarCell.m in Sources */,
-				0AD457DE191BC9E10063D1BC /* AtomicElementTileView.m in Sources */,
-				0AD457F0191BCA060063D1BC /* AtomicElementView.m in Sources */,
+				0A9071A1191DED040081CC39 /* AtomicElementTileView.m in Sources */,
+				0A9071A4191DED130081CC39 /* AtomicElementTableViewCell.m in Sources */,
 				0AD45785191BC2FB0063D1BC /* main.m in Sources */,
+				0A9071AB191DED280081CC39 /* AtomicElementFlippedView.m in Sources */,
+				0A9071B3191DED3B0081CC39 /* PeriodicElements.m in Sources */,
+				0A9071AD191DED280081CC39 /* AtomicElementViewController.m in Sources */,
 				0AD457FB191BDAAE0063D1BC /* CaterpillarViewController.m in Sources */,
 				0AD45789191BC2FB0063D1BC /* KxDxAppDelegate.m in Sources */,
 				0AD457B5191BC38E0063D1BC /* RelativeAnimation.m in Sources */,
-				0AD457E6191BC9F60063D1BC /* PeriodicElements.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
