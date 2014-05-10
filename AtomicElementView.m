@@ -104,20 +104,20 @@
 	
 	// draw the element name
 	UIFont *font = [UIFont boldSystemFontOfSize:36];
-	CGSize stringSize = [self.element.name sizeWithFont:font];
+	CGSize stringSize = [self.element.name sizeWithAttributes:@{NSFontAttributeName:font,NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	CGPoint point = CGPointMake((self.bounds.size.width-stringSize.width)/2, 256/2-50);
-	[self.element.name drawAtPoint:point withFont:font];
+	[self.element.name drawAtPoint:point withAttributes:@{NSFontAttributeName:font,NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	
 	// draw the element number
 	font = [UIFont boldSystemFontOfSize:48];
 	point = CGPointMake(10,0);
-	[[NSString stringWithFormat:@"%@", self.element.atomicNumber] drawAtPoint:point withFont:font];
+	[[NSString stringWithFormat:@"%@", self.element.atomicNumber] drawAtPoint:point withAttributes:@{NSFontAttributeName:font,NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	
 	// draw the element symbol
 	font = [UIFont boldSystemFontOfSize:96];
-	stringSize = [self.element.symbol sizeWithFont:font];
+	stringSize = [self.element.symbol sizeWithAttributes:@{NSFontAttributeName:font,NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	point = CGPointMake((self.bounds.size.width-stringSize.width)/2,256-120);
-	[self.element.symbol drawAtPoint:point withFont:font];
+	[self.element.symbol drawAtPoint:point withAttributes:@{NSFontAttributeName:font,NSForegroundColorAttributeName:[UIColor whiteColor]}];
 }
 
 
@@ -135,7 +135,7 @@ CGImageRef AEViewCreateGradientImage (int pixelsWide, int pixelsHigh) {
 	
 	// create the bitmap context
     gradientBitmapContext = CGBitmapContextCreate (NULL, pixelsWide, pixelsHigh,
-												   8, 0, colorSpace, kCGImageAlphaNone);
+												   8, 0, colorSpace, kCGBitmapByteOrder32Host|kCGImageAlphaPremultipliedFirst);
 	
 	if (gradientBitmapContext != NULL) {
 		// define the start and end grayscale values (with the alpha, even though
@@ -175,7 +175,7 @@ CGImageRef AEViewCreateGradientImage (int pixelsWide, int pixelsHigh) {
     colorSpace = CGColorSpaceCreateDeviceRGB();
 	
 	// create a bitmap graphics context the size of the image
-    mainViewContentContext = CGBitmapContextCreate (NULL, self.bounds.size.width,height, 8,0, colorSpace, kCGImageAlphaPremultipliedLast);
+    mainViewContentContext = CGBitmapContextCreate (NULL, self.bounds.size.width,height, 8,0, colorSpace, kCGBitmapByteOrder32Host|kCGImageAlphaPremultipliedFirst);
 	
 	// free the rgb colorspace
     CGColorSpaceRelease(colorSpace);	
@@ -205,7 +205,7 @@ CGImageRef AEViewCreateGradientImage (int pixelsWide, int pixelsHigh) {
 	// create a 2 bit CGImage containing a gradient that will be used for masking the 
 	// main view content to create the 'fade' of the reflection.  The CGImageCreateWithMask
 	// function will stretch the bitmap image as required, so we can create a 1 pixel wide gradient
-	CGImageRef gradientMaskImage = AEViewCreateGradientImage(1, height);
+	CGImageRef gradientMaskImage = AEViewCreateGradientImage(1, (int)height);
 	
 	// Create an image by masking the bitmap of the mainView content with the gradient view
 	// then release the pre-masked content bitmap and the gradient bitmap

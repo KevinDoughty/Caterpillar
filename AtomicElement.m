@@ -116,14 +116,14 @@
 	// draw the element number
 	UIFont *font = [UIFont boldSystemFontOfSize:8];
 	CGPoint point = CGPointMake(2,1);
-	[[self.atomicNumber stringValue] drawAtPoint:point withFont:font];
+	[[self.atomicNumber stringValue] drawAtPoint:point withAttributes:@{NSFontAttributeName:font,NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	
 	// draw the element symbol
 	font = [UIFont boldSystemFontOfSize:13];
-	CGSize stringSize = [self.symbol sizeWithFont:font];
+	CGSize stringSize = [self.symbol sizeWithAttributes:@{NSFontAttributeName:font,NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	point = CGPointMake((elementSymbolRectangle.size.width-stringSize.width)/2,10);
 	
-	[self.symbol drawAtPoint:point withFont:font];
+	[self.symbol drawAtPoint:point withAttributes:@{NSFontAttributeName:font,NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	
 	UIImage *theImage=UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();

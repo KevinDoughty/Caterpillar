@@ -417,7 +417,7 @@
                 double shrinkTime = addTime + delay;//late;
                 
                 NSInteger layoutIncrement = self.fixedIndex - index;
-                layoutIncrement = abs(layoutIncrement);
+                layoutIncrement = labs(layoutIncrement);
                 
                 double layoutTime = addTime;
                 double adjustTime = addTime;
