@@ -28,6 +28,16 @@
 
 #define  Relative_Default_Step_Count 50
 
+#ifndef Relative_Inslerpolate_h
+#define Relative_Inslerpolate_h
+CATransform3D relativeBlend(CATransform3D fromTransform, CATransform3D toTransform, double progress);
+#endif
+
+
+@interface RelativeBezier : NSObject
+@end
+
+
 @interface RelativeBezier()
 @property (assign,readonly) double ax;
 @property (assign,readonly) double bx;
@@ -38,6 +48,7 @@
 -(instancetype)initWithRelativeControlPoints:(double)p1x :(double)p1y :(double)p2x :(double)p2y;
 -(double)solveX:(double)x epsilon:(double)epsilon;
 @end
+
 
 @implementation RelativeAnimation
 
@@ -218,7 +229,7 @@ const double relativeBlendFloat(double old, double nu, double progress, BOOL isR
 
 #pragma mark - bezier
 
-
+// This file uses heavily modified code from original WebKit source, UnitBezier.h:
 /*
  * Copyright (C) 2008 Apple Inc. All Rights Reserved.
  *
@@ -244,7 +255,6 @@ const double relativeBlendFloat(double old, double nu, double progress, BOOL isR
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// This file has been heavily modified from the original WebKit source, UnitBezier.h
 
 @implementation RelativeBezier
 
@@ -329,6 +339,7 @@ const double relativeBlendFloat(double old, double nu, double progress, BOOL isR
 
 #pragma mark - transforms
 
+// This file uses heavily modified code from original WebKit source, TransformationMatrix.cpp:
 /*
  * Copyright (C) 2005, 2006 Apple Computer, Inc.  All rights reserved.
  * Copyright (C) 2009 Torch Mobile, Inc.
@@ -354,9 +365,6 @@ const double relativeBlendFloat(double old, double nu, double progress, BOOL isR
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-// This file has been HEAVILY modified from the original WebKit source, TransformationMatrix.cpp
-
 
 
 

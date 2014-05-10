@@ -28,7 +28,6 @@
 
 @interface RelativeAnimation : CAKeyframeAnimation
 
-+(instancetype)animationWithKeyPath:(NSString*)thePath;
 +(double(^)(double))perfectBezier;
 +(double(^)(double))bezierWithControlPoints:(double)p1x :(double)p1y :(double)p2x :(double)p2y;
 
@@ -41,8 +40,9 @@
 @end
 
 
-#pragma mark - bezier
 
+
+// This file uses heavily modified code from original WebKit source, UnitBezier.h:
 /*
  * Copyright (C) 2008 Apple Inc. All Rights Reserved.
  *
@@ -68,15 +68,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// This file has been heavily modified from the original WebKit source, UnitBezier.h
-
-@interface RelativeBezier : NSObject
-
-@end
 
 
-#pragma mark - transforms
-
+// This file uses heavily modified code from original WebKit source, TransformationMatrix.cpp:
 /*
  * Copyright (C) 2005, 2006 Apple Computer, Inc.  All rights reserved.
  * Copyright (C) 2009 Torch Mobile, Inc.
@@ -102,12 +96,3 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-// This file has been heavily modified from the original WebKit source, TransformationMatrix.cpp
-
-#ifndef Relative_Inslerpolate_h
-#define Relative_Inslerpolate_h
-
-CATransform3D relativeBlend(CATransform3D fromTransform, CATransform3D toTransform, double progress);
-
-#endif
