@@ -46,7 +46,7 @@ The timingBlock is converted to keyframes.
 This determines how many are used.
 The default is 50.
 
-#### `+(double(^)(double))bezierWithControlPoints:(double)p1x :(double)p1y :(double)p2x :(double)p2y;
+#### `+(double(^)(double))bezierWithControlPoints:(double)p1x :(double)p1y :(double)p2x :(double)p2y;`
 
 A convenience constructor that returns a block that can be used as the `timingBlock`.
 
