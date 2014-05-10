@@ -35,10 +35,6 @@ CATransform3D relativeBlend(CATransform3D fromTransform, CATransform3D toTransfo
 
 
 @interface RelativeBezier : NSObject
-@end
-
-
-@interface RelativeBezier()
 @property (assign,readonly) double ax;
 @property (assign,readonly) double bx;
 @property (assign,readonly) double cx;

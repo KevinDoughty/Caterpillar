@@ -41,8 +41,6 @@
 		0AD4579E191BC2FC0063D1BC /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD4579D191BC2FC0063D1BC /* XCTest.framework */; };
 		0AD4579F191BC2FC0063D1BC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD45778191BC2FB0063D1BC /* Foundation.framework */; };
 		0AD457A0191BC2FC0063D1BC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD4577C191BC2FB0063D1BC /* UIKit.framework */; };
-		0AD457A8191BC2FC0063D1BC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457A6191BC2FC0063D1BC /* InfoPlist.strings */; };
-		0AD457AA191BC2FC0063D1BC /* CaterpillarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457A9191BC2FC0063D1BC /* CaterpillarTests.m */; };
 		0AD457B5191BC38E0063D1BC /* RelativeAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457B4191BC38E0063D1BC /* RelativeAnimation.m */; };
 		0AD457F5191BD34A0063D1BC /* CaterpillarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457F4191BD34A0063D1BC /* CaterpillarView.m */; };
 		0AD457F8191BD43A0063D1BC /* CaterpillarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457F7191BD43A0063D1BC /* CaterpillarCell.m */; };
@@ -105,9 +103,6 @@
 		0AD45796191BC2FC0063D1BC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		0AD4579C191BC2FC0063D1BC /* CaterpillarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CaterpillarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AD4579D191BC2FC0063D1BC /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		0AD457A5191BC2FC0063D1BC /* CaterpillarTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CaterpillarTests-Info.plist"; sourceTree = "<group>"; };
-		0AD457A7191BC2FC0063D1BC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		0AD457A9191BC2FC0063D1BC /* CaterpillarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CaterpillarTests.m; sourceTree = "<group>"; };
 		0AD457B3191BC38E0063D1BC /* RelativeAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RelativeAnimation.h; sourceTree = "<group>"; };
 		0AD457B4191BC38E0063D1BC /* RelativeAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RelativeAnimation.m; sourceTree = "<group>"; };
 		0AD457F3191BD34A0063D1BC /* CaterpillarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaterpillarView.h; sourceTree = "<group>"; };
@@ -149,7 +144,6 @@
 				0AD457B7191BC9B70063D1BC /* The Elements */,
 				0AD457B6191BC3940063D1BC /* Animation */,
 				0AD4577E191BC2FB0063D1BC /* Caterpillar */,
-				0AD457A3191BC2FC0063D1BC /* CaterpillarTests */,
 				0AD45777191BC2FB0063D1BC /* Frameworks */,
 				0AD45776191BC2FB0063D1BC /* Products */,
 			);
@@ -200,24 +194,6 @@
 				0AD45781191BC2FB0063D1BC /* InfoPlist.strings */,
 				0AD45784191BC2FB0063D1BC /* main.m */,
 				0AD45786191BC2FB0063D1BC /* Caterpillar-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		0AD457A3191BC2FC0063D1BC /* CaterpillarTests */ = {
-			isa = PBXGroup;
-			children = (
-				0AD457A9191BC2FC0063D1BC /* CaterpillarTests.m */,
-				0AD457A4191BC2FC0063D1BC /* Supporting Files */,
-			);
-			path = CaterpillarTests;
-			sourceTree = "<group>";
-		};
-		0AD457A4191BC2FC0063D1BC /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				0AD457A5191BC2FC0063D1BC /* CaterpillarTests-Info.plist */,
-				0AD457A6191BC2FC0063D1BC /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -405,7 +381,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0AD457A8191BC2FC0063D1BC /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,7 +411,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0AD457AA191BC2FC0063D1BC /* CaterpillarTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,14 +429,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				0AD45782191BC2FB0063D1BC /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		0AD457A6191BC2FC0063D1BC /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0AD457A7191BC2FC0063D1BC /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
