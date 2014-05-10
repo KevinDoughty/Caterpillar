@@ -31,11 +31,11 @@
 +(double(^)(double))perfectBezier;
 +(double(^)(double))bezierWithControlPoints:(double)p1x :(double)p1y :(double)p2x :(double)p2y;
 
-@property (nonatomic,strong) id fromValue;
-@property (nonatomic,strong) id toValue;
-@property (nonatomic,assign) BOOL absolute;
+@property (strong) id fromValue;
+@property (strong) id toValue;
+@property (assign) BOOL absolute;
 @property (assign) NSUInteger steps;
-@property (nonatomic, copy) double (^timingBlock)(double);
+@property (copy) double (^timingBlock)(double);
 
 @end
 
