@@ -48,8 +48,6 @@
 
 @property (strong) CaterpillarCell *selectedCaterpillarCell;
 
-@property (copy) NSArray *oldVisibleCells;
-
 @end
 
 @implementation CaterpillarView
@@ -202,7 +200,19 @@
 
 #pragma mark - layout
 
-
+-(void)updateLayout { // This should not be public. I would prefer to use setNeedsLayout and layoutSubviews but for now it's giving me problems by being called too much
+    NSUInteger middleIndex = self.fixedIndex;
+    CGFloat oldMiddle = [self.delegate caterpillarView:self previousRectOfItemAtIndex:middleIndex].origin.y;
+    CGFloat newMiddle = [self.delegate caterpillarView:self rectOfItemAtIndex:middleIndex].origin.y;
+    if (oldMiddle != newMiddle) {
+        //NSLog(@"oldMiddle:%f; newMiddle:%f;",oldMiddle,newMiddle);
+        CGRect newBounds = self.bounds;
+        CGFloat deltaY = oldMiddle - newMiddle;
+        newBounds.origin.y -= deltaY;
+        if (newBounds.origin.y < self.contentInset.top * -1) newBounds.origin.y = self.contentInset.top * -1;
+        self.bounds = newBounds;
+    } else [self syncSubviews];
+}
 
 -(void)setBounds:(CGRect)bounds {
     [CATransaction begin];
@@ -210,18 +220,6 @@
     [super setBounds:bounds];
     [self syncSubviews];
     [CATransaction commit];
-}
--(void)updateLayout { // This should not be public. I would prefer to use setNeedsLayout and layoutSubviews but for now it's giving me problems by being called too much
-    NSUInteger middleIndex = self.fixedIndex;
-    CGRect oldMiddle = [self.delegate caterpillarView:self previousRectOfItemAtIndex:middleIndex];
-    CGRect newMiddle = [self.delegate caterpillarView:self rectOfItemAtIndex:middleIndex];
-    if (oldMiddle.origin.y != newMiddle.origin.y) {
-        CGRect newBounds = self.bounds;
-        CGFloat deltaY = oldMiddle.origin.y - newMiddle.origin.y;
-        newBounds.origin.y -= deltaY;
-        if (newBounds.origin.y < self.contentInset.top * -1) newBounds.origin.y = self.contentInset.top * -1;
-        self.bounds = newBounds;
-    } else [self syncSubviews];
 }
 
 -(void)syncSubviews {
@@ -237,9 +235,9 @@
         if (self.animatedRange.length == 0) self.animatedRange = visibleRange;
         else self.animatedRange = NSUnionRange(self.animatedRange, visibleRange);
         
-        [self clipCellsCleanUp];
-        
-        [self addCellsToRange:originalRange];
+        [self clipCellsCleanUp]; // remove non animated cells outside of visible range
+        [self addCellsToRange:originalRange]; // insert new cells and copy animations
+        [self layoutAllCells];
         
         NSUInteger count = [self.dataSource numberOfItemsInCaterpillarView:self];
         if (count) {
@@ -251,20 +249,6 @@
         
         [self animateLayout];
         [CATransaction commit];
-    }
-}
-
--(void)ORIGINALaddCellsSetUp {
-    for (NSUInteger row = self.animatedRange.location; row < NSMaxRange(self.animatedRange); row++) {
-        CGRect frame = [[self delegate] caterpillarView:self rectOfItemAtIndex:row];
-        CaterpillarCell *cell = [self cachedCellForRow:row];
-        if (!cell) {
-            cell = [[self dataSource] caterpillarView:self cellForItemAtIndex:row];
-            [self setCachedCell:cell forRow:row];
-            [self addSubview:cell];
-        }
-        cell.layer.anchorPoint = CGPointMake(.5, 0);
-        cell.frame = frame;
     }
 }
 
@@ -290,49 +274,53 @@
         [layer addAnimation:animation forKey:[self animationKey:key]];
     }
 }
+
+
+-(void)layoutAllCells {
+    for (NSUInteger row = self.animatedRange.location; row < NSMaxRange(self.animatedRange); row++) {
+        CGRect frame = [[self delegate] caterpillarView:self rectOfItemAtIndex:row];
+        CaterpillarCell *cell = [self cachedCellForRow:row];
+        if (!cell) {
+            cell = [[self dataSource] caterpillarView:self cellForItemAtIndex:row];
+            [self setCachedCell:cell forRow:row];
+            [self addSubview:cell];
+        }
+        cell.layer.anchorPoint = CGPointMake(.5, 0);
+        cell.frame = frame;
+    }
+}
+
+
 -(void)addCellsToRange:(NSRange)originalRange {
     if (!self.visibleRange.length) return;
     
-    //NSLog(@"---");
     if (self.animatedRange.location < originalRange.location) {
         NSUInteger visibleLoc = NSMaxRange(self.visibleRange);
         NSUInteger animatedLoc = self.animatedRange.location;
         CaterpillarCell *previousCell = [self cachedCellForRow:visibleLoc];
         while (visibleLoc-- > animatedLoc) {
-            NSLog(@"vis:%ld; anim:%ld; vis:%@; anim:%@; orig:%@;",visibleLoc,animatedLoc,NSStringFromRange(self.visibleRange),NSStringFromRange(self.animatedRange),NSStringFromRange(originalRange));
-            
-            //for (NSUInteger row = self.visibleRange.location; row < NSMaxRange(self.animatedRange); row++) {
-            CGRect frame = [[self delegate] caterpillarView:self rectOfItemAtIndex:visibleLoc];
             CaterpillarCell *cell = [self cachedCellForRow:visibleLoc];
             if (!cell) {
-                NSLog(@"- row:%ld; vis:%@; anim:%@; orig:%@;",visibleLoc,NSStringFromRange(self.visibleRange),NSStringFromRange(self.animatedRange),NSStringFromRange(originalRange));
-                
+                //NSLog(@"- row:%ld; vis:%@; anim:%@; orig:%@;",visibleLoc,NSStringFromRange(self.visibleRange),NSStringFromRange(self.animatedRange),NSStringFromRange(originalRange));
                 cell = [[self dataSource] caterpillarView:self cellForItemAtIndex:visibleLoc];
                 [self setCachedCell:cell forRow:visibleLoc];
                 [self addSubview:cell];
                 [self copyAnimationsFrom:previousCell to:cell];
             }
-            cell.layer.anchorPoint = CGPointMake(.5, 0);
-            cell.frame = frame;
             previousCell = cell;
         }
     }
     if (NSMaxRange(self.animatedRange) > NSMaxRange(originalRange)) {
         CaterpillarCell *previousCell = previousCell = [self cachedCellForRow:self.visibleRange.location];
         for (NSUInteger row = self.visibleRange.location; row < NSMaxRange(self.animatedRange); row++) {
-            
-            CGRect frame = [[self delegate] caterpillarView:self rectOfItemAtIndex:row];
             CaterpillarCell *cell = [self cachedCellForRow:row];
             if (!cell) {
-                NSLog(@"+ row:%ld; vis:%@; anim:%@; orig:%@;",row,NSStringFromRange(self.visibleRange),NSStringFromRange(self.animatedRange),NSStringFromRange(originalRange));
-                
+                //NSLog(@"+ row:%ld; vis:%@; anim:%@; orig:%@;",row,NSStringFromRange(self.visibleRange),NSStringFromRange(self.animatedRange),NSStringFromRange(originalRange));
                 cell = [[self dataSource] caterpillarView:self cellForItemAtIndex:row];
                 [self setCachedCell:cell forRow:row];
                 [self addSubview:cell];
                 [self copyAnimationsFrom:previousCell to:cell];
             }
-            cell.layer.anchorPoint = CGPointMake(.5, 0);
-            cell.frame = frame;
             previousCell = cell;
         }
     }
@@ -408,14 +396,6 @@
         scroll = NO;
         stretch = NO;
     }
-    
-    NSArray *oldVisible = self.oldVisibleCells;
-    // you're supposed to call [super setBounds:bounds] here.
-    NSArray *newVisible = self.subviews; // you did this in setBounds, this does not work here.
-    self.oldVisibleCells = newVisible;
-    NSMutableArray *insertedCells = newVisible.mutableCopy;
-    [insertedCells removeObjectsInArray:oldVisible];
-    
     
     NSArray *cells = [self subviews];
     
