@@ -135,7 +135,7 @@ CGImageRef AEViewCreateGradientImage (int pixelsWide, int pixelsHigh) {
 	
 	// create the bitmap context
     gradientBitmapContext = CGBitmapContextCreate (NULL, pixelsWide, pixelsHigh,
-												   8, 0, colorSpace, kCGBitmapByteOrder32Host);
+												   8, 0, colorSpace, kCGBitmapByteOrder32Host|kCGImageAlphaNone);
 	
 	if (gradientBitmapContext != NULL) {
 		// define the start and end grayscale values (with the alpha, even though
@@ -175,7 +175,7 @@ CGImageRef AEViewCreateGradientImage (int pixelsWide, int pixelsHigh) {
     colorSpace = CGColorSpaceCreateDeviceRGB();
 	
 	// create a bitmap graphics context the size of the image
-    mainViewContentContext = CGBitmapContextCreate (NULL, self.bounds.size.width,height, 8,0, colorSpace, kCGBitmapByteOrder32Host);
+    mainViewContentContext = CGBitmapContextCreate (NULL, self.bounds.size.width,height, 8,0, colorSpace, kCGBitmapByteOrder32Host|kCGImageAlphaPremultipliedFirst);
 	
 	// free the rgb colorspace
     CGColorSpaceRelease(colorSpace);	

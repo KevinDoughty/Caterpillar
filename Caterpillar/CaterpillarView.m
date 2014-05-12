@@ -35,9 +35,6 @@
 @property (nonatomic, strong) NSMutableSet *reusePool;
 @property (strong) NSMutableDictionary *cellCache;
 
-@property (strong) CaterpillarCell *leadingCell;
-@property (strong) CaterpillarCell *trailingCell;
-
 @property (assign) NSRange visibleRange;
 @property (assign) NSRange animatedRange;
 
@@ -50,6 +47,8 @@
 @property (assign) CGPoint previousOffset;
 
 @property (strong) CaterpillarCell *selectedCaterpillarCell;
+
+@property (copy) NSArray *oldVisibleCells;
 
 @end
 
@@ -117,95 +116,8 @@
 -(CaterpillarCell*)selectedCell {
     return self.selectedCaterpillarCell;
 }
+#pragma mark - misc
 
-#pragma mark - layout
-
--(void)updateLayout { // This should not be public. I would prefer to use setNeedsLayout and layoutSubviews but for now it's giving me problems by being called too much    
-    NSUInteger middleIndex = self.fixedIndex;
-    CGRect oldMiddle = [self.delegate caterpillarView:self previousRectOfItemAtIndex:middleIndex];
-    CGRect newMiddle = [self.delegate caterpillarView:self rectOfItemAtIndex:middleIndex];
-    if (oldMiddle.origin.y != newMiddle.origin.y) {
-        CGRect newBounds = self.bounds;
-        CGFloat deltaY = oldMiddle.origin.y - newMiddle.origin.y;
-        newBounds.origin.y -= deltaY;
-        if (newBounds.origin.y < self.contentInset.top * -1) newBounds.origin.y = self.contentInset.top * -1;
-        self.bounds = newBounds;
-    } else [self syncSubviews];
-}
-
--(void)syncSubviews {
-    
-    if (self.dataSource && self.delegate) {
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
-        
-        NSRange visibleRange = [[self delegate] caterpillarView:self rangeOfItemsInRect:self.bounds];
-        self.visibleRange = visibleRange;
-        if (self.animatedRange.length == 0) self.animatedRange = visibleRange;
-        else self.animatedRange = NSUnionRange(self.animatedRange, visibleRange);
-        
-        [self cleanUp];
-        
-        for (NSUInteger row = self.animatedRange.location; row < NSMaxRange(self.animatedRange); row++) {
-            CGRect frame = [[self delegate] caterpillarView:self rectOfItemAtIndex:row];
-            CaterpillarCell *cell = [self cachedCellForRow:row];
-            if (!cell) {
-                cell = [[self dataSource] caterpillarView:self cellForItemAtIndex:row];
-                [self setCachedCell:cell forRow:row];
-                [self addSubview:cell];
-            }
-            cell.layer.anchorPoint = CGPointMake(.5, 0);
-            cell.frame = frame;
-        }
-        
-        NSUInteger count = [self.dataSource numberOfItemsInCaterpillarView:self];
-        if (count) {
-            CGRect lastRect = [[self delegate] caterpillarView:self rectOfItemAtIndex:count-1];
-            self.contentSize = CGSizeMake(lastRect.origin.x+lastRect.size.width, lastRect.origin.y + lastRect.size.height);
-        } else self.contentSize = self.bounds.size;
-        
-        
-        
-        [self animateLayout];
-        [CATransaction commit];
-    }
-}
-
--(void)cleanUp {
-    
-    NSRange newRange = self.animatedRange;
-    NSUInteger above = NSMaxRange(self.animatedRange);
-    NSUInteger top = NSMaxRange(self.visibleRange);
-    NSUInteger below = self.animatedRange.location;
-    NSUInteger bottom = self.visibleRange.location;
-    while (above-- > top) {
-        CaterpillarCell *view = [self cachedCellForRow:above];
-        if (view) {
-            CALayer *layer = view.layer;
-            if (layer.animationKeys.count == 0) {
-                [[self reusePool] addObject:view];
-                [view removeFromSuperview];
-                [self setCachedCell:nil forRow:above];
-                newRange.length--;
-            } else break;
-        }
-    }
-    while (below < bottom) {
-        CaterpillarCell *view = [self cachedCellForRow:below];
-        if (view) {
-            CALayer *layer = view.layer;
-            if (layer.animationKeys.count == 0) {
-                [[self reusePool] addObject:view];
-                [view removeFromSuperview];
-                [self setCachedCell:nil forRow:below];
-                newRange.location++;
-                newRange.length--;
-            } else break;
-        }
-        below++;
-    }
-    self.animatedRange = newRange;
-}
 
 -(CaterpillarCell*)cachedCellForRow:(NSInteger) row {
     return [self.cellCache objectForKey:@(row)];
@@ -282,10 +194,15 @@
 
 -(NSString*)animationKey:(NSString*)key {
     static NSUInteger animationCounter = 0;
-    NSString *result = [NSString stringWithFormat:@"%@%lu",key,(unsigned long)animationCounter];
+    NSString *result = [NSString stringWithFormat:@"%@_%lu",key,(unsigned long)animationCounter];
     animationCounter++;
     return result;
 }
+
+
+#pragma mark - layout
+
+
 
 -(void)setBounds:(CGRect)bounds {
     [CATransaction begin];
@@ -294,7 +211,173 @@
     [self syncSubviews];
     [CATransaction commit];
 }
+-(void)updateLayout { // This should not be public. I would prefer to use setNeedsLayout and layoutSubviews but for now it's giving me problems by being called too much
+    NSUInteger middleIndex = self.fixedIndex;
+    CGRect oldMiddle = [self.delegate caterpillarView:self previousRectOfItemAtIndex:middleIndex];
+    CGRect newMiddle = [self.delegate caterpillarView:self rectOfItemAtIndex:middleIndex];
+    if (oldMiddle.origin.y != newMiddle.origin.y) {
+        CGRect newBounds = self.bounds;
+        CGFloat deltaY = oldMiddle.origin.y - newMiddle.origin.y;
+        newBounds.origin.y -= deltaY;
+        if (newBounds.origin.y < self.contentInset.top * -1) newBounds.origin.y = self.contentInset.top * -1;
+        self.bounds = newBounds;
+    } else [self syncSubviews];
+}
 
+-(void)syncSubviews {
+    
+    if (self.dataSource && self.delegate) {
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
+        
+        NSRange originalRange = self.animatedRange;
+        
+        NSRange visibleRange = [[self delegate] caterpillarView:self rangeOfItemsInRect:self.bounds];
+        self.visibleRange = visibleRange;
+        if (self.animatedRange.length == 0) self.animatedRange = visibleRange;
+        else self.animatedRange = NSUnionRange(self.animatedRange, visibleRange);
+        
+        [self clipCellsCleanUp];
+        
+        [self addCellsToRange:originalRange];
+        
+        NSUInteger count = [self.dataSource numberOfItemsInCaterpillarView:self];
+        if (count) {
+            CGRect lastRect = [[self delegate] caterpillarView:self rectOfItemAtIndex:count-1];
+            self.contentSize = CGSizeMake(lastRect.origin.x+lastRect.size.width, lastRect.origin.y + lastRect.size.height);
+        } else self.contentSize = self.bounds.size;
+        
+        
+        
+        [self animateLayout];
+        [CATransaction commit];
+    }
+}
+
+-(void)ORIGINALaddCellsSetUp {
+    for (NSUInteger row = self.animatedRange.location; row < NSMaxRange(self.animatedRange); row++) {
+        CGRect frame = [[self delegate] caterpillarView:self rectOfItemAtIndex:row];
+        CaterpillarCell *cell = [self cachedCellForRow:row];
+        if (!cell) {
+            cell = [[self dataSource] caterpillarView:self cellForItemAtIndex:row];
+            [self setCachedCell:cell forRow:row];
+            [self addSubview:cell];
+        }
+        cell.layer.anchorPoint = CGPointMake(.5, 0);
+        cell.frame = frame;
+    }
+}
+
+-(void)copyAnimationsFrom:(CaterpillarCell*)fromCell to:(CaterpillarCell*)toCell {
+   
+    CALayer *originalLayer = fromCell.layer;
+    NSArray *keys = [originalLayer animationKeys];
+    
+    NSString *incrementString = [self incrementString];
+    CALayer *layer = toCell.layer;
+    //NSLog(@"[%lu %@] copy:%lu; from:(%lu %@) %lu-%lu (%lu)",[[layer valueForKey:@"number"] unsignedIntegerValue],[layer valueForKey:@"name"],keys.count,[[originalLayer valueForKey:@"number"] unsignedIntegerValue],[originalLayer valueForKey:@"name"],self.animatedRange.location,NSMaxRange(self.animatedRange)-1,self.animatedRange.length);
+    for (NSString *key in keys) {
+        CAAnimation *animation = [originalLayer animationForKey:key];
+        
+        if ([key hasPrefix:@"stretching"] || [key hasPrefix:@"scrolling"]) {
+            NSNumber *value = [animation valueForKey:incrementString];
+            if (value != nil) {
+                CGFloat increment = [value floatValue];
+                animation = animation.copy;
+                animation.beginTime += increment;
+            }
+        }
+        [layer addAnimation:animation forKey:[self animationKey:key]];
+    }
+}
+-(void)addCellsToRange:(NSRange)originalRange {
+    if (!self.visibleRange.length) return;
+    
+    //NSLog(@"---");
+    if (self.animatedRange.location < originalRange.location) {
+        NSUInteger visibleLoc = NSMaxRange(self.visibleRange);
+        NSUInteger animatedLoc = self.animatedRange.location;
+        CaterpillarCell *previousCell = [self cachedCellForRow:visibleLoc];
+        while (visibleLoc-- > animatedLoc) {
+            NSLog(@"vis:%ld; anim:%ld; vis:%@; anim:%@; orig:%@;",visibleLoc,animatedLoc,NSStringFromRange(self.visibleRange),NSStringFromRange(self.animatedRange),NSStringFromRange(originalRange));
+            
+            //for (NSUInteger row = self.visibleRange.location; row < NSMaxRange(self.animatedRange); row++) {
+            CGRect frame = [[self delegate] caterpillarView:self rectOfItemAtIndex:visibleLoc];
+            CaterpillarCell *cell = [self cachedCellForRow:visibleLoc];
+            if (!cell) {
+                NSLog(@"- row:%ld; vis:%@; anim:%@; orig:%@;",visibleLoc,NSStringFromRange(self.visibleRange),NSStringFromRange(self.animatedRange),NSStringFromRange(originalRange));
+                
+                cell = [[self dataSource] caterpillarView:self cellForItemAtIndex:visibleLoc];
+                [self setCachedCell:cell forRow:visibleLoc];
+                [self addSubview:cell];
+                [self copyAnimationsFrom:previousCell to:cell];
+            }
+            cell.layer.anchorPoint = CGPointMake(.5, 0);
+            cell.frame = frame;
+            previousCell = cell;
+        }
+    }
+    if (NSMaxRange(self.animatedRange) > NSMaxRange(originalRange)) {
+        CaterpillarCell *previousCell = previousCell = [self cachedCellForRow:self.visibleRange.location];
+        for (NSUInteger row = self.visibleRange.location; row < NSMaxRange(self.animatedRange); row++) {
+            
+            CGRect frame = [[self delegate] caterpillarView:self rectOfItemAtIndex:row];
+            CaterpillarCell *cell = [self cachedCellForRow:row];
+            if (!cell) {
+                NSLog(@"+ row:%ld; vis:%@; anim:%@; orig:%@;",row,NSStringFromRange(self.visibleRange),NSStringFromRange(self.animatedRange),NSStringFromRange(originalRange));
+                
+                cell = [[self dataSource] caterpillarView:self cellForItemAtIndex:row];
+                [self setCachedCell:cell forRow:row];
+                [self addSubview:cell];
+                [self copyAnimationsFrom:previousCell to:cell];
+            }
+            cell.layer.anchorPoint = CGPointMake(.5, 0);
+            cell.frame = frame;
+            previousCell = cell;
+        }
+    }
+}
+
+-(void)clipCellsCleanUp {
+    
+    NSRange newRange = self.animatedRange;
+    NSUInteger animatedTop = NSMaxRange(self.animatedRange);
+    NSUInteger animatedBottom = self.animatedRange.location;
+    const NSUInteger visibleTop = NSMaxRange(self.visibleRange);
+    const NSUInteger visibleBottom = self.visibleRange.location;
+    
+    while (animatedTop-- > visibleTop) {
+        CaterpillarCell *view = [self cachedCellForRow:animatedTop];
+        if (view) {
+            CALayer *layer = view.layer;
+            if (layer.animationKeys.count == 0) {
+                [[self reusePool] addObject:view];
+                [view removeFromSuperview];
+                [self setCachedCell:nil forRow:animatedTop];
+                newRange.length--;
+            } else break;
+        }
+    }
+    while (animatedBottom < visibleBottom) {
+        CaterpillarCell *view = [self cachedCellForRow:animatedBottom];
+        if (view) {
+            CALayer *layer = view.layer;
+            if (layer.animationKeys.count == 0) {
+                [[self reusePool] addObject:view];
+                [view removeFromSuperview];
+                [self setCachedCell:nil forRow:animatedBottom];
+                newRange.location++;
+                newRange.length--;
+            } else break;
+        }
+        animatedBottom++;
+    }
+    self.animatedRange = newRange;
+}
+
+-(NSString*)incrementString {
+    return @"caterpillarIncrement";
+}
 -(void)animateLayout {
     
     CGFloat oldY = self.previousOffset.y;
@@ -313,7 +396,8 @@
     BOOL layout = YES;
     BOOL adjust = YES;
     BOOL compensateForDelay = YES;
-    BOOL copyAnimations = YES;
+    
+    NSString *incrementString = [self incrementString];
     
     
     BOOL isScrolling = (deltaH == 0);
@@ -325,11 +409,13 @@
         stretch = NO;
     }
     
-    NSArray *oldVisible = self.subviews;
-    
-    NSArray *newVisible = self.subviews;
+    NSArray *oldVisible = self.oldVisibleCells;
+    // you're supposed to call [super setBounds:bounds] here.
+    NSArray *newVisible = self.subviews; // you did this in setBounds, this does not work here.
+    self.oldVisibleCells = newVisible;
     NSMutableArray *insertedCells = newVisible.mutableCopy;
     [insertedCells removeObjectsInArray:oldVisible];
+    
     
     NSArray *cells = [self subviews];
     
@@ -353,9 +439,11 @@
         scrolling.toValue = @(oldY);
         scrolling.duration = duration;
         scrolling.timingBlock = scrollTimingBlock;
+        [scrolling setValue:@(space) forKey:incrementString];
         
         RelativeAnimation *stretching = [RelativeAnimation animationWithKeyPath:@"transform.scale.y"];
         stretching.absolute = YES;
+        [stretching setValue:@(space) forKey:incrementString];
         
         RelativeAnimation *sizing = [RelativeAnimation animationWithKeyPath:@"bounds.size"];
         sizing.duration = [self layoutDuration];
@@ -380,25 +468,7 @@
         
         CGFloat addTime = CACurrentMediaTime();
         
-        if (copyAnimations) {
-            
-            
-            CALayer *originalLayer = nil;
-            if (deltaY < 0) originalLayer = self.leadingCell.layer;
-            else originalLayer = self.trailingCell.layer;
-            
-            NSArray *keys = [originalLayer animationKeys];
-            
-            for (CaterpillarCell *insertedCell in insertedCells) {
-                CALayer *layer = insertedCell.layer;
-                for (NSString *key in keys) {
-                    CAAnimation *animation = [originalLayer animationForKey:key];
-                    [layer addAnimation:animation forKey:key];
-                }
-            }
-            self.leadingCell = newVisible.firstObject;
-            self.trailingCell = newVisible.lastObject;
-        }
+        
         
         NSRange range = self.animatedRange;
         
