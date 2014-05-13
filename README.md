@@ -16,8 +16,12 @@ with an optional `timingBlock`.
 This does not work with implicit animation,
 instead animations must be explicit.
 For implicit animation, there is the `Seamless.framework`.
-Opacity animation does not work and rect animation must be broken up into components,
+Allowed types are CATransform3D, NSPoint, CGPoint, NSSize, CGSize, 
+and numbers which are treated as doubles.
+Opacity animation does not work properly.
+Rect animation must be broken up into components,
 for example position and bounds.size.
+Color animation is not supported.
 
 #### `@property (strong) id fromValue;`
 
@@ -30,7 +34,7 @@ Required. The animation's apparent end value.
 #### `@property (copy) double (^timingBlock)(double);`
 
 A block that takes as an argument animation progress from 0 to 1,
-and returns animation progress that can be below 0 and above 1.
+and returns animation progress that can extend below 0 and above 1.
 
 #### `@property (assign) BOOL absolute;`
 

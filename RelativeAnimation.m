@@ -101,117 +101,120 @@ const double relativeBlendFloat(double old, double nu, double progress, BOOL isR
         return @[];
     }
     
-    NSArray *theValues = nil;
-    
-    NSUInteger steps = self.steps;
-    if (steps < 2) steps = Relative_Default_Step_Count;
-    double (^theTimingBlock)(double) = self.timingBlock;
-    NSArray *(^keyframeValues)(NSValue *(^theValueBlock)(double)) = ^(NSValue *(^theValueBlock)(double)) { // A block that takes a block as an argument.
-        NSMutableArray *theValues = @[].mutableCopy;
-        for (NSUInteger i=0; i<steps; i++) {
-            double progress = (1.0/(steps-1))*i;
-            if (theTimingBlock) progress = theTimingBlock(progress);
-            NSValue *theFrame = theValueBlock(progress);
-            [theValues addObject:theFrame];
+    NSArray *theValues = [self valueForKey:@"relativeValues"]; // Fortunately setting this does not count as mutating an immutable animation. Optimization because this does get called more than once.
+    if (theValues == nil) {
+        
+        NSUInteger steps = self.steps;
+        if (steps < 2) steps = Relative_Default_Step_Count;
+        double (^theTimingBlock)(double) = self.timingBlock;
+        NSArray *(^keyframeValues)(NSValue *(^theValueBlock)(double)) = ^(NSValue *(^theValueBlock)(double)) { // A block that takes a block as an argument.
+            NSMutableArray *theValues = @[].mutableCopy;
+            for (NSUInteger i=0; i<steps; i++) {
+                double progress = (1.0/(steps-1))*i;
+                if (theTimingBlock) progress = theTimingBlock(progress);
+                NSValue *theFrame = theValueBlock(progress);
+                [theValues addObject:theFrame];
+            }
+            return theValues;
+        };
+        
+        NSValue *theOldValue = (NSValue*)self.fromValue;
+        NSValue *theNewValue = (NSValue*)self.toValue;
+        
+        const char *objCType = [theOldValue objCType];
+        BOOL isRelative = (![self absolute]);
+        
+        if (strcmp(objCType,@encode(CATransform3D))==0) {
+            CATransform3D theOld = [theOldValue CATransform3DValue];
+            CATransform3D theNew = [theNewValue CATransform3DValue];
+            CATransform3D theFrom = (isRelative) ? CATransform3DConcat(theOld,CATransform3DInvert(theNew)) : theOld;
+            CATransform3D theTo = (isRelative) ? CATransform3DIdentity : theNew;
+            
+            __weak typeof(self) me = self;
+            return keyframeValues(^(double progress) {
+                CATransform3D theResult = [me relativeBlendTransform:theFrom to:theTo progress:progress];
+                return [NSValue valueWithCATransform3D:theResult];
+            });
+            
+        } else if (strcmp(objCType,@encode(CGPoint))==0) {
+            CGPoint oldPoint, newPoint;
+#if TARGET_OS_IPHONE
+            oldPoint = [theOldValue CGPointValue];
+            newPoint = [theNewValue CGPointValue];
+#else
+            oldPoint = [theOldValue pointValue];
+            newPoint = [theNewValue pointValue];
+#endif
+            
+            theValues =  keyframeValues(^(double progress) {
+                CGFloat theX = relativeBlendFloat(oldPoint.x, newPoint.x, progress, isRelative);
+                CGFloat theY = relativeBlendFloat(oldPoint.y, newPoint.y, progress, isRelative);
+#if TARGET_OS_IPHONE
+                return [NSValue valueWithCGPoint:CGPointMake(theX, theY)];
+#else
+                return [NSValue valueWithPoint:NSMakePoint(theX, theY)];
+#endif
+            });
+            
+            
+        } else if (strcmp(objCType,@encode(CGRect))==0) { // rect animation is broken.
+            NSLog(@"rect animations must be split up into separate point and size animations, for example instead of bounds you could animate position and bounds.size");
+            CGRect oldRect, newRect;
+#if TARGET_OS_IPHONE
+            oldRect = [theOldValue CGRectValue];
+            newRect = [theNewValue CGRectValue];
+#else
+            oldRect = [theOldValue rectValue];
+            newRect = [theNewValue rectValue];
+#endif
+            
+            theValues = keyframeValues(^(double progress) {
+                CGFloat theX = relativeBlendFloat(oldRect.origin.x, newRect.origin.x, progress, isRelative);
+                CGFloat theY = relativeBlendFloat(oldRect.origin.y, newRect.origin.y, progress, isRelative);
+                CGFloat theW = relativeBlendFloat(oldRect.size.width, newRect.size.width, progress, isRelative);
+                CGFloat theH = relativeBlendFloat(oldRect.size.height, newRect.size.height, progress, isRelative);
+#if TARGET_OS_IPHONE
+                return [NSValue valueWithCGRect:CGRectMake(theX, theY, theW, theH)];
+#else
+                return [NSValue valueWithRect:NSMakeRect(theX, theY, theW, theH)];
+#endif
+            });
+            
+            
+        } else if (strcmp(objCType,@encode(CGSize))==0) {
+            CGSize oldSize, newSize;
+#if TARGET_OS_IPHONE
+            oldSize = [theOldValue CGSizeValue];
+            newSize = [theNewValue CGSizeValue];
+#else
+            oldSize = [theOldValue sizeValue];
+            newSize = [theNewValue sizeValue];
+#endif
+            
+            theValues = keyframeValues(^(double progress) {
+                CGFloat theW = relativeBlendFloat(oldSize.width, newSize.width, progress, isRelative);
+                CGFloat theH = relativeBlendFloat(oldSize.height, newSize.height, progress, isRelative);
+#if TARGET_OS_IPHONE
+                return [NSValue valueWithCGSize:CGSizeMake(theW, theH)];
+#else
+                return [NSValue valueWithSize:NSMakeSize(theW, theH)];
+#endif
+            });
+            
+        } else if (strcmp(objCType,@encode(float))==0 || strcmp(objCType,@encode(double))==0 ||
+                   // Animate ints as doubles just for the hell of it:
+                   // This does not make much sense for unsigned.
+                   // I do this in case someone animates from @0 to @1 instead of @0.0 to @1.0
+                   strcmp(objCType,@encode(NSInteger))==0 || strcmp(objCType,@encode(NSUInteger))==0 || strcmp(objCType,@encode(long))==0 || strcmp(objCType,@encode(long long))==0 || strcmp(objCType,@encode(int))==0 || strcmp(objCType,@encode(short))==0 || strcmp(objCType,@encode(char))==0 || strcmp(objCType,@encode(unsigned long))==0 || strcmp(objCType,@encode(unsigned long long))==0 || strcmp(objCType,@encode(unsigned int))==0 || strcmp(objCType,@encode(unsigned short))==0 || strcmp(objCType,@encode(unsigned char))==0) {
+            
+            double old = [(NSNumber*)theOldValue doubleValue];
+            double nu = [(NSNumber*)theNewValue doubleValue];
+            
+            theValues = keyframeValues(^(double progress) {
+                return [NSNumber numberWithDouble:(isRelative) ? (1-progress) * (old-nu) : old+(progress*(nu-old))];
+            });
         }
-        return theValues;
-    };
-    
-    NSValue *theOldValue = (NSValue*)self.fromValue;
-    NSValue *theNewValue = (NSValue*)self.toValue;
-    
-    const char *objCType = [theOldValue objCType];
-    BOOL isRelative = (![self absolute]);
-    
-    if (strcmp(objCType,@encode(CATransform3D))==0) {
-        CATransform3D theOld = [theOldValue CATransform3DValue];
-        CATransform3D theNew = [theNewValue CATransform3DValue];
-        CATransform3D theFrom = (isRelative) ? CATransform3DConcat(theOld,CATransform3DInvert(theNew)) : theOld;
-        CATransform3D theTo = (isRelative) ? CATransform3DIdentity : theNew;
-        
-        __weak typeof(self) me = self;
-        return keyframeValues(^(double progress) {
-            CATransform3D theResult = [me relativeBlendTransform:theFrom to:theTo progress:progress];
-            return [NSValue valueWithCATransform3D:theResult];
-        });
-        
-    } else if (strcmp(objCType,@encode(CGPoint))==0) {
-        CGPoint oldPoint, newPoint;
-#if TARGET_OS_IPHONE
-        oldPoint = [theOldValue CGPointValue];
-        newPoint = [theNewValue CGPointValue];
-#else
-        oldPoint = [theOldValue pointValue];
-        newPoint = [theNewValue pointValue];
-#endif
-        
-        theValues =  keyframeValues(^(double progress) {
-            CGFloat theX = relativeBlendFloat(oldPoint.x, newPoint.x, progress, isRelative);
-            CGFloat theY = relativeBlendFloat(oldPoint.y, newPoint.y, progress, isRelative);
-#if TARGET_OS_IPHONE
-            return [NSValue valueWithCGPoint:CGPointMake(theX, theY)];
-#else
-            return [NSValue valueWithPoint:NSMakePoint(theX, theY)];
-#endif
-        });
-        
-        
-    } else if (strcmp(objCType,@encode(CGRect))==0) { // rect animation is broken.
-        NSLog(@"rect animations must be split up into separate point and size animations, for example instead of bounds you could animate position and bounds.size");
-        CGRect oldRect, newRect;
-#if TARGET_OS_IPHONE
-        oldRect = [theOldValue CGRectValue];
-        newRect = [theNewValue CGRectValue];
-#else
-        oldRect = [theOldValue rectValue];
-        newRect = [theNewValue rectValue];
-#endif
-        
-        theValues = keyframeValues(^(double progress) {
-            CGFloat theX = relativeBlendFloat(oldRect.origin.x, newRect.origin.x, progress, isRelative);
-            CGFloat theY = relativeBlendFloat(oldRect.origin.y, newRect.origin.y, progress, isRelative);
-            CGFloat theW = relativeBlendFloat(oldRect.size.width, newRect.size.width, progress, isRelative);
-            CGFloat theH = relativeBlendFloat(oldRect.size.height, newRect.size.height, progress, isRelative);
-#if TARGET_OS_IPHONE
-            return [NSValue valueWithCGRect:CGRectMake(theX, theY, theW, theH)];
-#else
-            return [NSValue valueWithRect:NSMakeRect(theX, theY, theW, theH)];
-#endif
-        });
-        
-        
-    } else if (strcmp(objCType,@encode(CGSize))==0) {
-        CGSize oldSize, newSize;
-#if TARGET_OS_IPHONE
-        oldSize = [theOldValue CGSizeValue];
-        newSize = [theNewValue CGSizeValue];
-#else
-        oldSize = [theOldValue sizeValue];
-        newSize = [theNewValue sizeValue];
-#endif
-        
-        theValues = keyframeValues(^(double progress) {
-            CGFloat theW = relativeBlendFloat(oldSize.width, newSize.width, progress, isRelative);
-            CGFloat theH = relativeBlendFloat(oldSize.height, newSize.height, progress, isRelative);
-#if TARGET_OS_IPHONE
-            return [NSValue valueWithCGSize:CGSizeMake(theW, theH)];
-#else
-            return [NSValue valueWithSize:NSMakeSize(theW, theH)];
-#endif
-        });
-        
-    } else if (strcmp(objCType,@encode(float))==0 || strcmp(objCType,@encode(double))==0 ||
-               // Animate ints as doubles just for the hell of it:
-               // This does not make much sense for unsigned.
-               // I do this in case someone animates from @0 to @1 instead of @0.0 to @1.0
-               strcmp(objCType,@encode(NSInteger))==0 || strcmp(objCType,@encode(NSUInteger))==0 || strcmp(objCType,@encode(long))==0 || strcmp(objCType,@encode(long long))==0 || strcmp(objCType,@encode(int))==0 || strcmp(objCType,@encode(short))==0 || strcmp(objCType,@encode(char))==0 || strcmp(objCType,@encode(unsigned long))==0 || strcmp(objCType,@encode(unsigned long long))==0 || strcmp(objCType,@encode(unsigned int))==0 || strcmp(objCType,@encode(unsigned short))==0 || strcmp(objCType,@encode(unsigned char))==0) {
-        
-        double old = [(NSNumber*)theOldValue doubleValue];
-        double nu = [(NSNumber*)theNewValue doubleValue];
-        
-        theValues = keyframeValues(^(double progress) {
-            return [NSNumber numberWithDouble:(isRelative) ? (1-progress) * (old-nu) : old+(progress*(nu-old))];
-        });
+        [self setValue:theValues forKey:@"relativeValues"];
     }
     
     return theValues;

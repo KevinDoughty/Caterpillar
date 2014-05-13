@@ -200,7 +200,7 @@
 
 #pragma mark - layout
 
--(void)updateLayout { // This should not be public. I would prefer to use setNeedsLayout and layoutSubviews but for now it's giving me problems by being called too much
+-(void)updateLayout { // This should not be public. I would prefer to use setNeedsLayout and layoutSubviews but for now it's giving me problems by being called too much. Setting the bounds complicates things.
     NSUInteger middleIndex = self.fixedIndex;
     CGFloat oldMiddle = [self.delegate caterpillarView:self previousRectOfItemAtIndex:middleIndex].origin.y;
     CGFloat newMiddle = [self.delegate caterpillarView:self rectOfItemAtIndex:middleIndex].origin.y;
@@ -399,7 +399,7 @@
     
     NSArray *cells = [self subviews];
     
-    if (cells.count) {
+    if (cells.count && fabs(deltaY) > 1) {
         
         CGFloat topInset = self.contentInset.top;
         CGRect adjustedBounds = self.bounds;
