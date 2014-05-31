@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A37D13A1939840300B49F18 /* Elements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A37D1391939840300B49F18 /* Elements.plist */; };
 		0A90718E191DECEC0081CC39 /* Artificial_24.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A90717D191DECEC0081CC39 /* Artificial_24.png */; };
 		0A90718F191DECEC0081CC39 /* Artificial_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A90717E191DECEC0081CC39 /* Artificial_30.png */; };
 		0A907190191DECEC0081CC39 /* Artificial_37.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A90717F191DECEC0081CC39 /* Artificial_37.png */; };
@@ -59,6 +60,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A37D1391939840300B49F18 /* Elements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Elements.plist; sourceTree = "<group>"; };
 		0A90717D191DECEC0081CC39 /* Artificial_24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Artificial_24.png; path = Caterpillar/images/Artificial_24.png; sourceTree = "<group>"; };
 		0A90717E191DECEC0081CC39 /* Artificial_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Artificial_30.png; path = Caterpillar/images/Artificial_30.png; sourceTree = "<group>"; };
 		0A90717F191DECEC0081CC39 /* Artificial_37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Artificial_37.png; path = Caterpillar/images/Artificial_37.png; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 		0AD457B7191BC9B70063D1BC /* The Elements */ = {
 			isa = PBXGroup;
 			children = (
+				0A37D1391939840300B49F18 /* Elements.plist */,
 				0AD457E0191BC9E90063D1BC /* model */,
 				0AD457D9191BC9D60063D1BC /* views */,
 				0AD457E7191BC9FB0063D1BC /* detail */,
@@ -361,6 +364,7 @@
 				0A90719C191DECEC0081CC39 /* Solid_30.png in Resources */,
 				0AD457FD191BDC0C0063D1BC /* Main_iPhone.storyboard in Resources */,
 				0A90719A191DECEC0081CC39 /* Liquid_256.png in Resources */,
+				0A37D13A1939840300B49F18 /* Elements.plist in Resources */,
 				0A907199191DECEC0081CC39 /* Liquid_37.png in Resources */,
 				0A90718F191DECEC0081CC39 /* Artificial_30.png in Resources */,
 				0A907192191DECEC0081CC39 /* flipper_list_blue.png in Resources */,

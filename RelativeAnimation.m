@@ -51,6 +51,7 @@ CATransform3D relativeBlend(CATransform3D fromTransform, CATransform3D toTransfo
 +(double(^)(double))perfectBezier {
     return [self bezierWithControlPoints:.5 :0 :.5 :1];
 }
+
 +(double(^)(double))bezierWithControlPoints:(double)p1x :(double)p1y :(double)p2x :(double)p2y {
     RelativeBezier *bezier = [[RelativeBezier alloc] initWithRelativeControlPoints:p1x :p1y :p2x :p2y];
     return ^ (double progress) {
@@ -67,12 +68,14 @@ CATransform3D relativeBlend(CATransform3D fromTransform, CATransform3D toTransfo
     theCopy.steps = self.steps;
     return theCopy;
 }
+
 +(instancetype)animation {
     RelativeAnimation *theAnimation = [super animation];
     theAnimation.additive = YES;
     theAnimation.fillMode = kCAFillModeBackwards;
     return theAnimation;
 }
+
 +(instancetype)animationWithKeyPath:(NSString*)thePath {
     RelativeAnimation *theAnimation = [self animation];
     theAnimation.keyPath = thePath;
@@ -94,6 +97,14 @@ const double relativeBlendFloat(double old, double nu, double progress, BOOL isR
 -(void)setValues:(NSArray*)nomnomnom {
 }
 
+-(void)setTimingFunction:(CAMediaTimingFunction *)nomnomnom {
+}
+
+-(CAMediaTimingFunction*)timingFunction {
+    if (self.timingBlock) return [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    return [CAMediaTimingFunction functionWithControlPoints:.5 :0 :.5 :1];
+}
+
 -(NSArray*)values {
     
     if (![self.fromValue respondsToSelector:@selector(objCType)] || ![self.toValue respondsToSelector:@selector(objCType)]) {
@@ -107,6 +118,7 @@ const double relativeBlendFloat(double old, double nu, double progress, BOOL isR
         NSUInteger steps = self.steps;
         if (steps < 2) steps = Relative_Default_Step_Count;
         double (^theTimingBlock)(double) = self.timingBlock;
+        
         NSArray *(^keyframeValues)(NSValue *(^theValueBlock)(double)) = ^(NSValue *(^theValueBlock)(double)) { // A block that takes a block as an argument.
             NSMutableArray *theValues = @[].mutableCopy;
             for (NSUInteger i=0; i<steps; i++) {
@@ -214,7 +226,7 @@ const double relativeBlendFloat(double old, double nu, double progress, BOOL isR
                 return [NSNumber numberWithDouble:(isRelative) ? (1-progress) * (old-nu) : old+(progress*(nu-old))];
             });
         }
-        [self setValue:theValues forKey:@"relativeValues"];
+        [self setValue:theValues forKey:@"relativeValues"]; // Fortunately setting this does not count as mutating an immutable animation. Optimization because this does get called more than once.
     }
     
     return theValues;
