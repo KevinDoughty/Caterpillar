@@ -81,57 +81,58 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-@interface RelativeAnimation : CAKeyframeAnimation
-/*
+/**
+ A `CAKeyframeAnimation` subclass for explicit additive animation.
  You may not set keyframe values or keyTimes.
- Instead you set the fromValue and toValue, with an optional timingBlock. 
- This does not work with implicit animation, instead animations must be explicit.
- For implicit animation, there is the Seamless.framework. 
- Opacity animation does not work and rect animation must be broken up into components, 
- for example position and bounds.size.
+ Instead you set the fromValue and toValue,
+ with an optional timingBlock for easing.
+ This does not work with implicit animation.
  */
+@interface RelativeAnimation : CAKeyframeAnimation
 
-@property (strong) id fromValue;
-/*
- Required. The animation's apparent start value.
- */
 
-@property (strong) id toValue;
-/*
- Required. The animation's apparent end value.
+/**
+Required. The animation's apparent start value.
 */
+@property (strong) id fromValue;
 
-@property (copy) double (^timingBlock)(double);
-/*
+/**
+ Required. The animation's apparent end value.
+ */
+@property (strong) id toValue;
+
+/**
  A block that takes as an argument animation progress from 0 to 1,
  and returns animation progress that can be below 0 and above 1.
  */
+@property (copy) double (^timingBlock)(double);
 
-@property (assign) BOOL absolute;
-/*
- Animations run relative to the underlying model value. 
- Behind the scenes, animations are additive, 
- and the from and to values are converted to the old value minus the new value to zero. 
+/**
+ Animations run relative to the underlying model value.
+ Values are declared absolutely.
+ Behind the scenes from and to values become from minus to, with destination of zero.
  If absolute is YES, this conversion is not done.
  */
+@property (assign) BOOL absolute;
 
-@property (assign) NSUInteger steps;
-/*
- The timingBlock is converted to keyframes. 
- This determines how many are used. 
- The default is 50
+/**
+ The timingBlock is converted to keyframes.
+ This determines how many are used.
+ The default is 50.
  */
+@property (assign) NSUInteger steps;
 
-+(double(^)(double))bezierWithControlPoints:(double)p1x :(double)p1y :(double)p2x :(double)p2y;
-/*
+/**
  A convenience constructor that returns a block that can be used as the timingBlock.
  */
++(double(^)(double))bezierWithControlPoints:(double)p1x :(double)p1y :(double)p2x :(double)p2y;
 
-+(double(^)(double))perfectBezier;
-/*
- Equivalent to [RelativeAnimation bezierWithControlPoints:0.5 :0.0 :0.5 :1.0]; 
+/**
+ Equivalent to [RelativeAnimation bezierWithControlPoints:0.5 :0.0 :0.5 :1.0];
  This is gives nice blending for interrupted animations.
  */
++(double(^)(double))perfectBezier;
+
 
 
 @end
