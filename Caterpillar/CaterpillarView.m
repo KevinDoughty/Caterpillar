@@ -172,7 +172,14 @@
     };
 }
 
--(double(^)(double))timingBlock {
+-(double(^)(double))scrollBlock {
+    return ^ (double progress) {
+        double omega = 30.0;
+        double zeta = 0.7;
+        double beta = sqrt(1.0 - zeta * zeta);
+        progress = 1.0 / beta * expf(-zeta * omega * progress) * sinf(beta * omega * progress + atanf(beta / zeta));
+        return 1-progress;
+    };
     return [RelativeAnimation perfectBezier];
 }
 
@@ -185,7 +192,7 @@
 }
 
 -(CGFloat)animationDuration {
-    return .25;
+    return 2.5;
 }
 
 -(CGFloat)animationTimespan {
@@ -420,7 +427,7 @@
         if (compensateForDelay) space = (timespan / visibleLength);
         CGFloat longer = duration + space;
         
-        double (^scrollTimingBlock)(double) = [self timingBlock];
+        double (^scrollTimingBlock)(double) = [self scrollBlock];
         
         RelativeAnimation *scrolling = [RelativeAnimation animationWithKeyPath:@"position.y"];
         scrolling.fromValue = @(newY);
