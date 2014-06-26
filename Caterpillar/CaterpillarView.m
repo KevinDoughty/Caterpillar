@@ -175,7 +175,7 @@
 -(double(^)(double))scrollBlock {
     return ^ (double progress) {
         double omega = 30.0;
-        double zeta = 0.7;
+        double zeta = 0.8;
         double beta = sqrt(1.0 - zeta * zeta);
         progress = 1.0 / beta * expf(-zeta * omega * progress) * sinf(beta * omega * progress + atanf(beta / zeta));
         return 1-progress;
