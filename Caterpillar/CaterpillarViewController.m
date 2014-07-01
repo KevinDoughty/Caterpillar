@@ -209,7 +209,6 @@
         [cell addSubview:label];
     }
     cell.element = element;
-    cell.layer.anchorPoint = CGPointMake(.5, 0);
     [cell.layer setValue:element.name forKey:@"name"];
     [cell.layer setValue:element.atomicNumber forKey:@"number"];
 	return cell;

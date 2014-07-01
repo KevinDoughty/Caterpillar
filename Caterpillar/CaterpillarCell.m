@@ -30,6 +30,7 @@
 -(instancetype)initWithReuseIdentifier:(NSString*)reuseIdentifier {
     if ((self = [super initWithFrame: CGRectZero])) {
         self.reuseIdentifier = reuseIdentifier;
+        self.layer.anchorPoint = CGPointZero;
     }
     return self;
 }

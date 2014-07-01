@@ -296,7 +296,6 @@
             [self setCachedCell:cell forRow:row];
             [self addSubview:cell];
         }
-        cell.layer.anchorPoint = CGPointMake(.5, 0);
         cell.frame = frame;
     }
 }
@@ -387,12 +386,7 @@
     CGFloat oldY = self.previousOffset.y;
     CGFloat newY = self.contentOffset.y;
     CGFloat deltaY = newY - oldY;
-    
-    CGFloat oldH = self.previousSize.height;
-    CGFloat newH = self.contentSize.height;
-    CGFloat deltaH = newH - oldH;
-    
-    BOOL isScrolling = (deltaH == 0);
+    BOOL isScrolling = CGSizeEqualToSize(self.previousSize, self.contentSize);
     
     if (YES || fabs(deltaY) > 1) {
         
