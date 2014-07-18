@@ -39,10 +39,7 @@
 @property (assign) NSRange animatedRange;
 
 @property (strong) id <NSCopying, CaterpillarDelegate> previousLayoutManager;
-@property (assign) CGPoint previousContentOffset;
-@property (assign) CGRect previousBounds;
 @property (assign) NSUInteger fixedIndex;
-@property (assign) CGRect previousFrame;
 @property (assign) CGSize previousSize;
 @property (assign) CGPoint previousOffset;
 
@@ -128,7 +125,7 @@
     else [self.cellCache setObject:cell forKey:@(row)];
 }
 
--(void)determineFixedIndex {
+-(void)determineFixedIndex { // Fixed index should be replaced. Instead of finding vertical center, should be fixed at the row under the edge pan gesture location.
     NSRange range = [self.delegate caterpillarView:self rangeOfItemsInRect:self.bounds];
     self.fixedIndex = roundf(range.length/2.0) + range.location;
 }
@@ -381,195 +378,179 @@
     BOOL stretch = YES;
     BOOL layout = YES;
     BOOL adjust = YES;
-    BOOL compensateForDelay = YES;
     
     CGFloat oldY = self.previousOffset.y;
     CGFloat newY = self.contentOffset.y;
     CGFloat deltaY = newY - oldY;
     BOOL isScrolling = CGSizeEqualToSize(self.previousSize, self.contentSize);
     
-    if (YES || fabs(deltaY) > 1) {
-        
-        CGFloat timespan = [self animationTimespan];
-        CGFloat duration = [self animationDuration];
-        
-        NSString *incrementString = [self incrementString];
-        
-        if (isScrolling) {
-            adjust = NO;
-            layout = NO;
-        } else {
-            scroll = NO;
-            stretch = NO;
-        }
-        
-        CGFloat topInset = self.contentInset.top;
-        CGRect adjustedBounds = self.bounds;
-        adjustedBounds.size.height -= topInset;
-        adjustedBounds.origin.y += topInset;
-        
-        NSRange animatedRange = self.animatedRange;
-        NSRange visibleRange = self.visibleRange;
-        NSUInteger animatedMax = NSMaxRange(animatedRange);
-        NSUInteger visibleMax = NSMaxRange(visibleRange);
-        NSUInteger animatedLoc = animatedRange.location;
-        NSUInteger visibleLoc = visibleRange.location;
-        NSUInteger animatedLength = animatedRange.length;
-        NSUInteger visibleLength = visibleRange.length;
-        
-        CGFloat space = (timespan / animatedLength);
-        if (compensateForDelay) space = (timespan / visibleLength);
-        CGFloat longer = duration + space;
-        
-        double (^scrollTimingBlock)(double) = [self scrollBlock];
-        
-        RelativeAnimation *scrolling = [RelativeAnimation animationWithKeyPath:@"position.y"];
-        scrolling.fromValue = @(newY);
-        scrolling.toValue = @(oldY);
-        scrolling.duration = duration;
-        scrolling.timingBlock = scrollTimingBlock;
-        [scrolling setValue:@(space) forKey:incrementString];
-        
-        RelativeAnimation *stretching = [RelativeAnimation animationWithKeyPath:@"transform.scale.y"];
-        stretching.absolute = YES;
-        [stretching setValue:@(space) forKey:incrementString];
-        
-        RelativeAnimation *sizing = [RelativeAnimation animationWithKeyPath:@"bounds.size"];
-        sizing.duration = [self layoutDuration];
-        sizing.timingBlock = [self layoutBlock];
-        
-        RelativeAnimation *positioning = [RelativeAnimation animationWithKeyPath:@"position"];
-        positioning.duration = [self layoutDuration];
-        positioning.timingBlock = [self layoutBlock];
-        
-        RelativeAnimation *adjusting = [RelativeAnimation animationWithKeyPath:@"position.y"];
-        adjusting.timingBlock = [self layoutBlock];
-        adjusting.duration = [self layoutDuration];
-        adjusting.toValue = @(oldY);
-        adjusting.fromValue = @(newY);
-        
-        NSUInteger index = 0;
-        NSInteger direction = 1;
-        if (deltaY < 0) {
-            direction = -1;
-            index = animatedLength-1;
-        }
-        
-        CGFloat addTime = CACurrentMediaTime();
-        
-        for (NSUInteger row = animatedLoc; row < animatedMax; row++) {
-            
-            CaterpillarCell *view = [self cachedCellForRow:row];
-            if (view == nil) NSLog(@"no view at row:%lu; index:%lu; length:%lu;",(unsigned long)row,(unsigned long)index,(unsigned long)animatedLength);
-            else {
-                
-                double delay = ((double)index) * space;
-                double late = (((double)index) + 1) * space;
-                
-                double scrollTime = addTime + delay;
-                double stretchTime = addTime + delay;
-                double waveTime = addTime + delay;
-                double shrinkTime = addTime + delay;//late;
-                
-                NSInteger layoutIncrement = self.fixedIndex - index;
-                layoutIncrement = labs(layoutIncrement);
-                
-                double layoutTime = addTime;
-                double adjustTime = addTime;
-                
-                if (direction < 0) {
-                    scrollTime = addTime + late;
-                }
-                if (compensateForDelay) {
-                    if (direction > 0) {
-                        if (animatedLoc < visibleLoc) {
-                            double adjust = space * (visibleLoc - animatedLoc);
-                            scrollTime -= adjust;
-                            stretchTime -= adjust;
-                            shrinkTime -= adjust;
-                            waveTime -= adjust;
-                        }
-                    } else if (direction < 0) {
-                        if (visibleMax < animatedMax) {
-                            double adjust = space * (animatedMax - visibleMax);
-                            scrollTime -= adjust;
-                            stretchTime -= adjust;
-                            shrinkTime -= adjust;
-                            waveTime -= adjust;
-                        }
-                    }
-                }
-                scrolling.beginTime = scrollTime;
-                stretching.beginTime = stretchTime;
-                
-                sizing.beginTime = layoutTime;
-                positioning.beginTime = layoutTime;
-                adjusting.beginTime = adjustTime;
-                
-                stretching.duration = longer;
-                
-                double timeDiff = longer/duration;
-                
-                double (^earlyTimingBlock)(double) = ^double (double progress) {
-                    return MIN(1, progress * timeDiff);
-                };
-                double (^lateTimingBlock)(double) = ^double (double progress) {
-                    return MAX(0,(progress * timeDiff) - (timeDiff-1));
-                };
-                double (^differenceTimingBlock)(double) = ^double (double progress) {
-                    double earlier = scrollTimingBlock(earlyTimingBlock(progress));
-                    double later = scrollTimingBlock(lateTimingBlock(progress));
-                    double final = earlier - later;
-                    return final;
-                };
-                
-                if (scroll) {
-                    NSString *scrollString = [self animationKey:@"scrolling"];
-                    [view.layer addAnimation:scrolling forKey:scrollString];
-                }
-                
-                if (stretch) {
-                    CGFloat height = view.bounds.size.height;
-                    CGFloat full = height + abs(deltaY);
-                    CGFloat ratio = full / height;
-                    stretching.fromValue = @0.0f;
-                    stretching.toValue = @(ratio-1.0f);
-                    stretching.timingBlock = differenceTimingBlock;
-                    NSString *stretchString = [self animationKey:@"stretching"];
-                    [view.layer addAnimation:stretching forKey:stretchString];
-                }
-                
-                if (adjust) {
-                    NSString *adjustString = [self animationKey:@"adjusting"];
-                    [view.layer addAnimation:adjusting forKey:adjustString];
-                }
-                if (layout) {
-                    CGRect oldRect = [self.delegate caterpillarView:self previousRectOfItemAtIndex:row];
-                    CGSize oldSize = oldRect.size;
-                    CGPoint oldPosition = CGPointMake(oldRect.origin.x, oldRect.origin.y);
-                    CGRect newRect = [self.delegate caterpillarView:self rectOfItemAtIndex:row];
-                    CGSize newSize = newRect.size;
-                    CGPoint newPosition = CGPointMake(newRect.origin.x, newRect.origin.y);
-                    
-                    sizing.beginTime = layoutTime;
-                    sizing.fromValue = [NSValue valueWithCGSize:oldSize];
-                    sizing.toValue = [NSValue valueWithCGSize:newSize];
-                    NSString *sizeString = [self animationKey:@"sizing"];
-                    [view.layer addAnimation:sizing forKey:sizeString];
-                    
-                    positioning.beginTime = layoutTime;
-                    positioning.fromValue = [NSValue valueWithCGPoint:oldPosition];
-                    positioning.toValue = [NSValue valueWithCGPoint:newPosition];
-                    NSString *positionString = [self animationKey:@"positioning"];
-                    [view.layer addAnimation:positioning forKey:positionString];
-                }
-            }
-            index+=direction;
-        }
+    CGFloat timespan = [self animationTimespan];
+    CGFloat duration = [self animationDuration];
+    
+    NSString *incrementString = [self incrementString];
+    
+    if (isScrolling) {
+        adjust = NO;
+        layout = NO;
+    } else {
+        scroll = NO;
+        stretch = NO;
     }
     
-    self.previousBounds = self.bounds;
-    self.previousFrame = self.frame;
+    NSRange animatedRange = self.animatedRange;
+    NSRange visibleRange = self.visibleRange;
+    NSUInteger animatedMax = NSMaxRange(animatedRange);
+    NSUInteger visibleMax = NSMaxRange(visibleRange);
+    NSUInteger animatedLoc = animatedRange.location;
+    NSUInteger visibleLoc = visibleRange.location;
+    NSUInteger animatedLength = animatedRange.length;
+    NSUInteger visibleLength = visibleRange.length;
+    
+    CGFloat space = (timespan / visibleLength);
+    CGFloat longer = duration + space;
+    
+    double (^scrollTimingBlock)(double) = [self scrollBlock];
+    
+    RelativeAnimation *scrolling = [RelativeAnimation animationWithKeyPath:@"position.y"];
+    scrolling.fromValue = @(newY);
+    scrolling.toValue = @(oldY);
+    scrolling.duration = duration;
+    scrolling.timingBlock = scrollTimingBlock;
+    [scrolling setValue:@(space) forKey:incrementString];
+    
+    RelativeAnimation *stretching = [RelativeAnimation animationWithKeyPath:@"transform.scale.y"];
+    stretching.absolute = YES;
+    [stretching setValue:@(space) forKey:incrementString];
+    
+    RelativeAnimation *sizing = [RelativeAnimation animationWithKeyPath:@"bounds.size"];
+    sizing.duration = [self layoutDuration];
+    sizing.timingBlock = [self layoutBlock];
+    
+    RelativeAnimation *positioning = [RelativeAnimation animationWithKeyPath:@"position"];
+    positioning.duration = [self layoutDuration];
+    positioning.timingBlock = [self layoutBlock];
+    
+    RelativeAnimation *adjusting = [RelativeAnimation animationWithKeyPath:@"position.y"];
+    adjusting.timingBlock = [self layoutBlock];
+    adjusting.duration = [self layoutDuration];
+    adjusting.toValue = @(oldY);
+    adjusting.fromValue = @(newY);
+    
+    NSUInteger index = 0;
+    NSInteger direction = 1;
+    if (deltaY < 0) {
+        direction = -1;
+        index = animatedLength-1;
+    }
+    
+    CGFloat addTime = CACurrentMediaTime();
+    
+    for (NSUInteger row = animatedLoc; row < animatedMax; row++) {
+        
+        CaterpillarCell *view = [self cachedCellForRow:row];
+        if (view == nil) NSLog(@"no view at row:%lu; index:%lu; length:%lu;",(unsigned long)row,(unsigned long)index,(unsigned long)animatedLength);
+        else {
+            
+            double delay = ((double)index) * space;
+            double late = (((double)index) + 1) * space;
+            
+            double scrollTime = addTime + delay;
+            double stretchTime = addTime + delay;
+            double waveTime = addTime + delay;
+            double shrinkTime = addTime + delay;
+            
+            double layoutTime = addTime;
+            double adjustTime = addTime;
+            
+            if (direction > 0) {
+                if (animatedLoc < visibleLoc) {
+                    double adjust = space * (visibleLoc - animatedLoc);
+                    scrollTime -= adjust;
+                    stretchTime -= adjust;
+                    shrinkTime -= adjust;
+                    waveTime -= adjust;
+                }
+            } else if (direction < 0) {
+                
+                scrollTime = addTime + late;
+                
+                if (visibleMax < animatedMax) {
+                    double adjust = space * (animatedMax - visibleMax);
+                    scrollTime -= adjust;
+                    stretchTime -= adjust;
+                    shrinkTime -= adjust;
+                    waveTime -= adjust;
+                }
+            }
+            
+            scrolling.beginTime = scrollTime;
+            stretching.beginTime = stretchTime;
+            stretching.duration = longer;
+            
+            sizing.beginTime = layoutTime;
+            positioning.beginTime = layoutTime;
+            adjusting.beginTime = adjustTime;
+            
+            
+            double timeDiff = longer/duration;
+            
+            double (^earlyTimingBlock)(double) = ^double (double progress) {
+                return MIN(1, progress * timeDiff);
+            };
+            double (^lateTimingBlock)(double) = ^double (double progress) {
+                return MAX(0,(progress * timeDiff) - (timeDiff-1));
+            };
+            double (^differenceTimingBlock)(double) = ^double (double progress) {
+                double earlier = scrollTimingBlock(earlyTimingBlock(progress));
+                double later = scrollTimingBlock(lateTimingBlock(progress));
+                double final = earlier - later;
+                return final;
+            };
+            
+            if (scroll) {
+                NSString *scrollString = [self animationKey:@"scrolling"];
+                [view.layer addAnimation:scrolling forKey:scrollString];
+            }
+            
+            if (stretch) {
+                CGFloat height = view.bounds.size.height;
+                CGFloat full = height + abs(deltaY);
+                CGFloat ratio = full / height;
+                stretching.fromValue = @0.0f;
+                stretching.toValue = @(ratio-1.0f);
+                stretching.timingBlock = differenceTimingBlock;
+                NSString *stretchString = [self animationKey:@"stretching"];
+                [view.layer addAnimation:stretching forKey:stretchString];
+            }
+            
+            if (adjust) {
+                NSString *adjustString = [self animationKey:@"adjusting"];
+                [view.layer addAnimation:adjusting forKey:adjustString];
+            }
+            if (layout) {
+                CGRect oldRect = [self.delegate caterpillarView:self previousRectOfItemAtIndex:row];
+                CGSize oldSize = oldRect.size;
+                CGPoint oldPosition = CGPointMake(oldRect.origin.x, oldRect.origin.y);
+                CGRect newRect = [self.delegate caterpillarView:self rectOfItemAtIndex:row];
+                CGSize newSize = newRect.size;
+                CGPoint newPosition = CGPointMake(newRect.origin.x, newRect.origin.y);
+                
+                sizing.beginTime = layoutTime;
+                sizing.fromValue = [NSValue valueWithCGSize:oldSize];
+                sizing.toValue = [NSValue valueWithCGSize:newSize];
+                NSString *sizeString = [self animationKey:@"sizing"];
+                [view.layer addAnimation:sizing forKey:sizeString];
+                
+                positioning.beginTime = layoutTime;
+                positioning.fromValue = [NSValue valueWithCGPoint:oldPosition];
+                positioning.toValue = [NSValue valueWithCGPoint:newPosition];
+                NSString *positionString = [self animationKey:@"positioning"];
+                [view.layer addAnimation:positioning forKey:positionString];
+            }
+        }
+        index+=direction;
+    }
+    
     self.previousSize = self.contentSize;
     self.previousOffset = self.contentOffset;
     if (isScrolling) [self determineFixedIndex];
