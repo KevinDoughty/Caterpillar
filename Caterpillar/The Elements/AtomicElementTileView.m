@@ -64,9 +64,8 @@
     
 	// get the image that represents the element physical state and draw it
 	UIImage *backgroundImage = self.element.stateImageForAtomicElementTileView;
-	CGRect elementSymbolRectangle = CGRectMake(0,0, [backgroundImage size].width, [backgroundImage size].height);
-	//[backgroundImage drawInRect:elementSymbolRectangle];
-	[backgroundImage drawInRect:self.bounds];
+	CGRect elementSymbolRectangle = self.bounds;
+	[backgroundImage drawInRect:elementSymbolRectangle];
 	
 	[[UIColor whiteColor] set];
 	
