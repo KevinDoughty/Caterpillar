@@ -24,8 +24,9 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <UIKit/UIKit.h>
 #import "CaterpillarView.h"
 
-@interface CaterpillarViewController : UIViewController <CaterpillarDataSource, CaterpillarDelegate>
+@protocol CaterpillarLayoutManager;
+@interface KumamonLayoutManager : NSObject <CaterpillarLayoutManager>
+-(instancetype)initWithProgress:(CGFloat)progress;
 @end

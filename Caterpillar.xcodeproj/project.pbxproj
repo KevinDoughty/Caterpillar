@@ -47,6 +47,7 @@
 		0AD457F8191BD43A0063D1BC /* CaterpillarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457F7191BD43A0063D1BC /* CaterpillarCell.m */; };
 		0AD457FB191BDAAE0063D1BC /* CaterpillarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD457FA191BDAAE0063D1BC /* CaterpillarViewController.m */; };
 		0AD457FD191BDC0C0063D1BC /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AD457FC191BDC0C0063D1BC /* Main_iPhone.storyboard */; };
+		0AECCE751982BD090069161B /* KumamonLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AECCE741982BD090069161B /* KumamonLayoutManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +115,8 @@
 		0AD457F9191BDAAE0063D1BC /* CaterpillarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaterpillarViewController.h; sourceTree = "<group>"; };
 		0AD457FA191BDAAE0063D1BC /* CaterpillarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaterpillarViewController.m; sourceTree = "<group>"; };
 		0AD457FC191BDC0C0063D1BC /* Main_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main_iPhone.storyboard; sourceTree = "<group>"; };
+		0AECCE731982BD090069161B /* KumamonLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KumamonLayoutManager.h; sourceTree = "<group>"; };
+		0AECCE741982BD090069161B /* KumamonLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KumamonLayoutManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +182,8 @@
 				0AD45788191BC2FB0063D1BC /* KxDxAppDelegate.m */,
 				0AD457F3191BD34A0063D1BC /* CaterpillarView.h */,
 				0AD457F4191BD34A0063D1BC /* CaterpillarView.m */,
+				0AECCE731982BD090069161B /* KumamonLayoutManager.h */,
+				0AECCE741982BD090069161B /* KumamonLayoutManager.m */,
 				0AD457F6191BD43A0063D1BC /* CaterpillarCell.h */,
 				0AD457F7191BD43A0063D1BC /* CaterpillarCell.m */,
 				0AD457F9191BDAAE0063D1BC /* CaterpillarViewController.h */,
@@ -404,6 +409,7 @@
 				0AD45785191BC2FB0063D1BC /* main.m in Sources */,
 				0A9071AB191DED280081CC39 /* AtomicElementFlippedView.m in Sources */,
 				0A9071B3191DED3B0081CC39 /* PeriodicElements.m in Sources */,
+				0AECCE751982BD090069161B /* KumamonLayoutManager.m in Sources */,
 				0A9071AD191DED280081CC39 /* AtomicElementViewController.m in Sources */,
 				0AD457FB191BDAAE0063D1BC /* CaterpillarViewController.m in Sources */,
 				0AD45789191BC2FB0063D1BC /* KxDxAppDelegate.m in Sources */,

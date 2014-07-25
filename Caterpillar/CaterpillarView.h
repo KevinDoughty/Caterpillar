@@ -30,15 +30,17 @@
 @class CaterpillarCell;
 
 
-@protocol CaterpillarDelegate <NSObject, UIScrollViewDelegate>
+@protocol CaterpillarLayoutManager <NSObject, NSCopying>
 @required
--(NSRange)caterpillarView:(CaterpillarView*)caterpillarView rangeOfItemsInRect:(CGRect)rect;
+-(NSRange)caterpillarView:(CaterpillarView*)caterpillarView rangeOfItemsInRect:(CGRect)rect; // This does not necessarily need to reflect the actual number of items provided by the dataSource, that range is intersected with this. This way the layoutManager does not need to know about the dataSource, if your design allows it.
 -(CGRect)caterpillarView:(CaterpillarView*)caterpillarView rectOfItemAtIndex:(NSUInteger)index;
--(CGRect)caterpillarView:(CaterpillarView*)caterpillarView previousRectOfItemAtIndex:(NSUInteger)index;
+@end
+
+
+@protocol CaterpillarDelegate <NSObject, UIScrollViewDelegate>
 @optional
 -(void)caterpillarView:(CaterpillarView*)caterpillarView didSelectItemAtIndex:(NSUInteger)index;
 @end
-
 
 
 @protocol CaterpillarDataSource <NSObject>
@@ -48,15 +50,14 @@
 @end
 
 
-
 @interface CaterpillarView : UIScrollView
+
 @property (nonatomic, weak) IBOutlet id <CaterpillarDataSource> dataSource;
 @property (nonatomic, weak) IBOutlet id <CaterpillarDelegate> delegate;
+@property (nonatomic, strong) id <CaterpillarLayoutManager> layoutManager;
 
 -(CaterpillarCell*)dequeueReusableCellWithIdentifier:(NSString*)reuseIdentifier;
 -(void)reloadData;
 -(CaterpillarCell*)selectedCell;
--(void)updateLayout; // This should not be public. I would prefer to use setNeedsLayout and layoutSubviews but for now it's giving me problems by being called too much
-
 
 @end

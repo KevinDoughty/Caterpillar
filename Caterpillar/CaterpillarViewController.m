@@ -26,16 +26,18 @@
 
 #import "CaterpillarViewController.h"
 #import "CaterpillarView.h"
+
 #import "AtomicElementTableViewCell.h"
 #import "PeriodicElements.h"
 #import "AtomicElement.h"
 #import "AtomicElementTileView.h"
 #import "AtomicElementViewController.h"
 
+#import "KumamonLayoutManager.h"
+
 @interface CaterpillarViewController()
 @property (strong) UIScreenEdgePanGestureRecognizer *leftToRightRecognizer;
 @property (strong) UIScreenEdgePanGestureRecognizer *rightToLeftRecognizer;
-@property (assign) CGFloat previousLayoutState;
 @end
 
 @implementation CaterpillarViewController
@@ -60,8 +62,11 @@
     [super viewDidLoad];
     
     [self setTitle: @"Caterpillar Scroll"];
-    
     [self.view setBackgroundColor: [UIColor whiteColor]];
+    
+    KumamonLayoutManager *layoutManager = [[KumamonLayoutManager alloc] initWithProgress:0];
+    [(CaterpillarView*)self.view setLayoutManager:layoutManager];
+    
     [(CaterpillarView*)self.view reloadData];
     
     self.rightToLeftRecognizer = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(handleRightToLeftPan:)];
@@ -109,87 +114,12 @@
 }
 
 -(void)updateLayoutWithProgress:(CGFloat)progress {
-    self.layoutState = progress;
-    [(CaterpillarView*)self.view updateLayout]; // I would prefer to use setNeedsLayout and layoutSubviews but for now it's giving me problems by being called too much
-}
-
--(void)setLayoutState:(CGFloat)layoutState {
-    self.previousLayoutState = self.layoutState;
-    _layoutState = layoutState;
-}
-
-#pragma mark - data source and delegate
-
--(CGFloat)itemHeight {
-    return 60;
-}
-
--(CGFloat)minimumLineSpacing {
-    return 10.0;
-}
-
--(NSRange)caterpillarView:(CaterpillarView*)caterpillarView rangeOfItemsInRect:(CGRect)rect {
-    CGFloat itemHeight = [self itemHeight]; //+ [self minimumLineSpacing];
-    CGRect bounds = caterpillarView.bounds;
-    NSUInteger sublayersPerRow = [self squaresPerRowInWidth:bounds.size.width * self.layoutState];
-    NSUInteger indexOrigin = 0;
-    CGFloat yPaddingPercentage = 0;
-    CGFloat xPaddingPercentage = 0;
-    CGFloat itemDimension = itemHeight;
-    CGRect visibleRect = caterpillarView.bounds;
-    CGFloat y = (yPaddingPercentage * itemDimension) + (itemDimension + (xPaddingPercentage * itemDimension));
+    KumamonLayoutManager *layoutManager = [[KumamonLayoutManager alloc] initWithProgress:progress];
+    [(CaterpillarView*)self.view setLayoutManager:layoutManager];
     
-    while (y < visibleRect.origin.y) {
-        indexOrigin += sublayersPerRow;
-        y += (itemDimension + (xPaddingPercentage * itemDimension));
-    }
-    
-    NSUInteger indexMax = indexOrigin + sublayersPerRow;
-    while (y < visibleRect.origin.y + visibleRect.size.height) {
-        indexMax += sublayersPerRow;
-        y += (itemDimension + (xPaddingPercentage * itemDimension));
-    }
-    NSRange theRange = NSMakeRange(indexOrigin, indexMax - indexOrigin);
-    NSRange fullRange = NSMakeRange(0, [self numberOfItemsInCaterpillarView:caterpillarView]);
-    NSRange finalRange = NSIntersectionRange(theRange,fullRange);
-    
-    return finalRange;
 }
 
--(NSUInteger)squaresPerRowInWidth:(CGFloat)width {
-    CGFloat xPaddingPercentage = 0;
-    CGFloat itemDimension = [self itemHeight];
-	NSUInteger theSquaresPerRow = (NSUInteger)floor(width / (itemDimension + (xPaddingPercentage * itemDimension)));
-	if (theSquaresPerRow < 1) return 1;
-	return theSquaresPerRow;
-}
-
--(CGRect)caterpillarView:(CaterpillarView*)caterpillarView rectOfItemAtIndex:(NSUInteger)index {
-    return [self rectOfItemAtIndex:index width:caterpillarView.bounds.size.width state:self.layoutState];
-}
-
--(CGRect)caterpillarView:(CaterpillarView*)caterpillarView previousRectOfItemAtIndex:(NSUInteger)index {
-    return [self rectOfItemAtIndex:index width:caterpillarView.bounds.size.width state:self.previousLayoutState];
-}
-
--(CGRect)rectOfItemAtIndex:(NSUInteger)index width:(CGFloat)width state:(CGFloat)state  {
-    CGFloat height = [self itemHeight];
-    if (state == 0) {
-        CGRect rect = CGRectMake(0,index * (height + 0),width,height);
-        return rect;
-    } else {
-        CGFloat xPaddingPercentage = 0;
-        CGFloat yPaddingPercentage = 0;
-        CGFloat itemDimension = height;
-        NSUInteger sublayersPerRow = [self squaresPerRowInWidth:width * state];
-        CGFloat x = (xPaddingPercentage * itemDimension) + ((CGFloat)(index % sublayersPerRow) * (itemDimension  + (xPaddingPercentage * itemDimension)));
-        CGFloat y = (yPaddingPercentage * itemDimension) + (floor((CGFloat)index / (CGFloat)sublayersPerRow) * (itemDimension + (yPaddingPercentage * itemDimension)));
-        CGFloat w =  (itemDimension  + (xPaddingPercentage * itemDimension));
-        CGFloat h = (itemDimension  + (yPaddingPercentage * itemDimension));
-        CGRect rect = CGRectMake(roundf(x),roundf(y),roundf(w),roundf(h));
-        return rect;
-    }
-}
+#pragma mark - data source
 
 -(NSInteger)numberOfItemsInCaterpillarView:(CaterpillarView*)caterpillarView {
     NSUInteger count = [[[PeriodicElements sharedPeriodicElements] elementsSortedByNumber] count];
@@ -213,6 +143,8 @@
     [cell.layer setValue:element.atomicNumber forKey:@"number"];
 	return cell;
 }
+
+#pragma mark - delegate
 
 -(void)caterpillarView:(CaterpillarView*)caterpillarView didSelectItemAtIndex:(NSUInteger)index {
     UINavigationController *navigationController = (UINavigationController*)caterpillarView.window.rootViewController;

@@ -38,7 +38,8 @@
 @property (assign) NSRange visibleRange;
 @property (assign) NSRange animatedRange;
 
-@property (strong) id <NSCopying, CaterpillarDelegate> previousLayoutManager;
+@property (strong) id <CaterpillarLayoutManager> previousLayoutManager;
+
 @property (assign) NSUInteger fixedIndex;
 @property (assign) CGSize previousSize;
 @property (assign) CGPoint previousOffset;
@@ -126,7 +127,8 @@
 }
 
 -(void)determineFixedIndex { // Fixed index should be replaced. Instead of finding vertical center, should be fixed at the row under the edge pan gesture location.
-    NSRange range = [self.delegate caterpillarView:self rangeOfItemsInRect:self.bounds];
+    //NSRange range = [self.layoutManager caterpillarView:self rangeOfItemsInRect:self.bounds];
+    NSRange range = self.visibleRange;
     self.fixedIndex = roundf(range.length/2.0) + range.location;
 }
 
@@ -209,26 +211,28 @@
 
 #pragma mark - layout
 
--(void)updateLayout { // This should not be public. I would prefer to use setNeedsLayout and layoutSubviews but for now it's giving me problems by being called too much. Setting the bounds complicates things.
+
+-(void)setLayoutManager:(id<CaterpillarLayoutManager>)layoutManager {
+
+    self.previousLayoutManager = _layoutManager;
+    _layoutManager = [layoutManager copyWithZone:nil];
+    
     NSUInteger middleIndex = self.fixedIndex;
-    CGFloat oldMiddle = [self.delegate caterpillarView:self previousRectOfItemAtIndex:middleIndex].origin.y;
-    CGFloat newMiddle = [self.delegate caterpillarView:self rectOfItemAtIndex:middleIndex].origin.y;
-    if (oldMiddle != newMiddle) {
-        //NSLog(@"oldMiddle:%f; newMiddle:%f;",oldMiddle,newMiddle);
+    CGRect oldMiddle = [self.previousLayoutManager caterpillarView:self rectOfItemAtIndex:middleIndex];
+    CGRect newMiddle = [self.layoutManager caterpillarView:self rectOfItemAtIndex:middleIndex];
+    if (oldMiddle.origin.y != newMiddle.origin.y) {
         CGRect newBounds = self.bounds;
-        CGFloat deltaY = oldMiddle - newMiddle;
+        CGFloat deltaY = oldMiddle.origin.y - newMiddle.origin.y;
         newBounds.origin.y -= deltaY;
         if (newBounds.origin.y < self.contentInset.top * -1) newBounds.origin.y = self.contentInset.top * -1;
         self.bounds = newBounds;
     } else [self syncSubviews];
+
 }
 
 -(void)setBounds:(CGRect)bounds {
-    [CATransaction begin];
-    [CATransaction setDisableActions:YES];
     [super setBounds:bounds];
     [self syncSubviews];
-    [CATransaction commit];
 }
 
 -(void)syncSubviews {
@@ -239,7 +243,10 @@
         
         NSRange originalRange = self.animatedRange;
         
-        NSRange visibleRange = [[self delegate] caterpillarView:self rangeOfItemsInRect:self.bounds];
+        NSRange dataRange = NSMakeRange(0,[self.dataSource numberOfItemsInCaterpillarView:self]);
+        NSRange layoutRange = [self.layoutManager caterpillarView:self rangeOfItemsInRect:self.bounds]; // LayoutManager does not have to know dataSource numberOfItems info.
+        NSRange visibleRange = NSIntersectionRange(dataRange, layoutRange); // So you need to intersect with dataSource full item range.
+        
         self.visibleRange = visibleRange;
         if (self.animatedRange.length == 0) self.animatedRange = visibleRange;
         else self.animatedRange = NSUnionRange(self.animatedRange, visibleRange);
@@ -250,11 +257,9 @@
         
         NSUInteger count = [self.dataSource numberOfItemsInCaterpillarView:self];
         if (count) {
-            CGRect lastRect = [[self delegate] caterpillarView:self rectOfItemAtIndex:count-1];
+            CGRect lastRect = [self.layoutManager caterpillarView:self rectOfItemAtIndex:count-1];
             self.contentSize = CGSizeMake(lastRect.origin.x+lastRect.size.width, lastRect.origin.y + lastRect.size.height);
         } else self.contentSize = self.bounds.size;
-        
-        
         
         [self animateLayout];
         [CATransaction commit];
@@ -286,7 +291,7 @@
 
 -(void)layoutAllCells {
     for (NSUInteger row = self.animatedRange.location; row < NSMaxRange(self.animatedRange); row++) {
-        CGRect frame = [[self delegate] caterpillarView:self rectOfItemAtIndex:row];
+        CGRect frame = [self.layoutManager caterpillarView:self rectOfItemAtIndex:row];
         CaterpillarCell *cell = [self cachedCellForRow:row];
         if (!cell) {
             cell = [[self dataSource] caterpillarView:self cellForItemAtIndex:row];
@@ -382,13 +387,13 @@
     CGFloat oldY = self.previousOffset.y;
     CGFloat newY = self.contentOffset.y;
     CGFloat deltaY = newY - oldY;
-    BOOL isScrolling = CGSizeEqualToSize(self.previousSize, self.contentSize);
     
     CGFloat timespan = [self animationTimespan];
     CGFloat duration = [self animationDuration];
     
     NSString *incrementString = [self incrementString];
     
+    BOOL isScrolling = CGSizeEqualToSize(self.previousSize, self.contentSize);
     if (isScrolling) {
         adjust = NO;
         layout = NO;
@@ -528,10 +533,10 @@
                 [view.layer addAnimation:adjusting forKey:adjustString];
             }
             if (layout) {
-                CGRect oldRect = [self.delegate caterpillarView:self previousRectOfItemAtIndex:row];
+                CGRect oldRect = [self.previousLayoutManager caterpillarView:self rectOfItemAtIndex:row];
                 CGSize oldSize = oldRect.size;
                 CGPoint oldPosition = CGPointMake(oldRect.origin.x, oldRect.origin.y);
-                CGRect newRect = [self.delegate caterpillarView:self rectOfItemAtIndex:row];
+                CGRect newRect = [self.layoutManager caterpillarView:self rectOfItemAtIndex:row];
                 CGSize newSize = newRect.size;
                 CGPoint newPosition = CGPointMake(newRect.origin.x, newRect.origin.y);
                 
