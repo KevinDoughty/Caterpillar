@@ -51,9 +51,7 @@
 @implementation CaterpillarView
 
 
-#pragma mark - init and dealloc
-
-
+#pragma mark - init
 
 -(id)initWithCoder:(NSCoder*)decoder {
     if ((self = [super initWithCoder:decoder])) {
@@ -107,15 +105,16 @@
     [self.cellCache removeAllObjects];
     [[self reusePool] removeAllObjects];
     [self syncSubviews];
-    //[self determineFixedIndex];
+    [self determineFixedIndex];
     self.selectedCaterpillarCell = nil;
 }
 
 -(CaterpillarCell*)selectedCell {
     return self.selectedCaterpillarCell;
 }
-#pragma mark - misc
 
+
+#pragma mark - misc
 
 -(CaterpillarCell*)cachedCellForRow:(NSInteger) row {
     return [self.cellCache objectForKey:@(row)];
@@ -127,7 +126,6 @@
 }
 
 -(void)determineFixedIndex { // Fixed index should be replaced. Instead of finding vertical center, should be fixed at the row under the edge pan gesture location.
-    //NSRange range = [self.layoutManager caterpillarView:self rangeOfItemsInRect:self.bounds];
     NSRange range = self.visibleRange;
     self.fixedIndex = roundf(range.length/2.0) + range.location;
 }
@@ -159,7 +157,7 @@
     [self reloadData];
 }
 
-#pragma mark - seamless
+#pragma mark - animation
 
 -(double(^)(double))elasticBlock {
     return ^ (double progress) {
@@ -210,7 +208,6 @@
 
 
 #pragma mark - layout
-
 
 -(void)setLayoutManager:(id<CaterpillarLayoutManager>)layoutManager {
 
@@ -273,7 +270,6 @@
     
     NSString *incrementString = [self incrementString];
     CALayer *layer = toCell.layer;
-    //NSLog(@"[%lu %@] copy:%lu; from:(%lu %@) %lu-%lu (%lu)",[[layer valueForKey:@"number"] unsignedIntegerValue],[layer valueForKey:@"name"],keys.count,[[originalLayer valueForKey:@"number"] unsignedIntegerValue],[originalLayer valueForKey:@"name"],self.animatedRange.location,NSMaxRange(self.animatedRange)-1,self.animatedRange.length);
     for (NSString *key in keys) {
         CAAnimation *animation = [originalLayer animationForKey:key];
         
@@ -312,7 +308,6 @@
         while (visibleLoc-- > animatedLoc) {
             CaterpillarCell *cell = [self cachedCellForRow:visibleLoc];
             if (!cell) {
-                //NSLog(@"- row:%ld; vis:%@; anim:%@; orig:%@;",visibleLoc,NSStringFromRange(self.visibleRange),NSStringFromRange(self.animatedRange),NSStringFromRange(originalRange));
                 cell = [[self dataSource] caterpillarView:self cellForItemAtIndex:visibleLoc];
                 [self setCachedCell:cell forRow:visibleLoc];
                 [self addSubview:cell];
@@ -326,7 +321,6 @@
         for (NSUInteger row = self.visibleRange.location; row < NSMaxRange(self.animatedRange); row++) {
             CaterpillarCell *cell = [self cachedCellForRow:row];
             if (!cell) {
-                //NSLog(@"+ row:%ld; vis:%@; anim:%@; orig:%@;",row,NSStringFromRange(self.visibleRange),NSStringFromRange(self.animatedRange),NSStringFromRange(originalRange));
                 cell = [[self dataSource] caterpillarView:self cellForItemAtIndex:row];
                 [self setCachedCell:cell forRow:row];
                 [self addSubview:cell];
@@ -338,7 +332,6 @@
 }
 
 -(void)clipCellsCleanUp {
-    
     NSRange newRange = self.animatedRange;
     NSUInteger animatedTop = NSMaxRange(self.animatedRange);
     NSUInteger animatedBottom = self.animatedRange.location;
@@ -377,6 +370,7 @@
 -(NSString*)incrementString {
     return @"caterpillarIncrement";
 }
+
 -(void)animateLayout {
     
     BOOL scroll = YES;
